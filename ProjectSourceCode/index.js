@@ -155,7 +155,23 @@ const auth = (req, res, next) => {
   next();
 };
 
-// AUTHENTICATION!!! (use disocver example)
+// NEED TO ADD AUTHENTICATION!!! (use disocver example)
+
+// Logout route
+app.get('/logout', (req, res) => {
+    req.session.destroy(err => {
+      if (err) {
+        // If there's an error during logout, you can log it and respond accordingly
+        console.error('Session destruction error:', err);
+        return res.status(500).send('Could not log out.');
+      }
+      // Render the logout page with a success message
+      res.render('pages/logout', {
+        message: 'Logged out Successfully',
+        error: false
+      });
+    });
+  });  
 
 // *****************************************************
 // <!-- Section 5 : Start Server-->
