@@ -1,0 +1,14 @@
+{{!-- Include the header --}}
+{{> header}}
+
+<div class="profile-container">
+    <h1>{{user.name}}'s Profile</h1>
+
+    <div class="profile-details">
+        <p><strong>Email:</strong> {{user.email}}</p>
+        <p><strong>Username:</strong> {{user.username}}</p>
+        <p><strong>Joined:</strong> {{user.joinDate}}</p>
+    </div>
+
+{{!-- Include the footer --}}
+{{> footer}}
