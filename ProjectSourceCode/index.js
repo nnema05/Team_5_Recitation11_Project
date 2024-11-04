@@ -25,6 +25,7 @@ const hbs = handlebars.create({
     partialsDir: __dirname + '/src/views/partials',
 });
 
+app.set('views', path.join(__dirname, 'src', 'views'));
 app.use(express.static(path.join(__dirname, 'resources'))); // Updated path to serve static files
   
 // database configuration
