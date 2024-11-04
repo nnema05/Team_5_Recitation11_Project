@@ -1,0 +1,1 @@
+/* for images and other database things that we will insert */
