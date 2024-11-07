@@ -157,6 +157,38 @@ const auth = (req, res, next) => {
 };
 
 // NEED TO ADD AUTHENTICATION!!! (use disocver example)
+// Authentication Required
+app.use(auth);
+app.use('/discover', auth);
+
+// Discover page
+app.get('/discover', async (req, res) => {
+  try {
+    const response = await axios({
+      url: 'https://app.ticketmaster.com/discovery/v2/events.json',
+      method: 'GET',
+      headers: { 'Accept-Encoding': 'application/json' },
+      params: {
+        apikey: process.env.API_KEY,
+        keyword: 'Drake',
+        size: 10, // Number of events to retrieve
+      },
+    });
+
+    const events = response.data._embedded.events.map(event => ({
+      name: event.name,
+      image: event.images[0]?.url || 'https://example.com/default.jpg',
+      date: event.dates.start.localDate,
+      time: event.dates.start.localTime,
+      url: event.url
+    }));
+
+    res.render('pages/discover', { events });
+  } catch (error) {
+    console.error('Error fetching events:', error);
+    res.render('pages/discover', { events: [], message: 'Failed to load events.' });
+  }
+});
 
 // Logout route
 app.get('/logout', (req, res) => {
