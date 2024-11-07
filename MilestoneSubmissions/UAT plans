@@ -1,0 +1,13 @@
+1. Profile Page
+  a. Test: Make sure every user is asked for a name, username, email, phone number, password, profile picture, and they are all displayed on the profile page.
+  b. Test environment is through the cloud.
+  c. The results must have all of the specified criteria.
+2. For You Page
+  a. Test: Feed keeps going until data from API key has all been displayed. Display "You are all caught up" when there is no data left to display.
+  b. Test: For every post, there is info about the clothing piece, a pictue, date, where it is from, and how much it was. 
+  c. Test environment is through the cloud.
+  d. The results must have all of the specified criteria.
+3. My Closet Page
+  a. Test: When user upload a picture of their clothing, make sure they have info about the clothing piece, a pictue, date, where it is from, and how much it was. 
+  b. Test environment is through the cloud.
+  c. The results must have all of the specified criteria.
