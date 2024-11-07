@@ -61,6 +61,20 @@ describe('Testing register API', () => {
         done();
       });
   });
+
+  // Negative test case for invalid username and password
+  it('negative : /register with invalid username and password', done => {
+    chai
+      .request(server)
+      .post('/register')
+      .set('x-test-request', 'true')
+      .send({ id: 6, name: 'Jane Doe', dob: '2020-02-20', username: '', password: '' }) // Invalid inputs
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body.message).to.equals('Invalid input');
+        done();
+      });
+  });
 });
 
 
