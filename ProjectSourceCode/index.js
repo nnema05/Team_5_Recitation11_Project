@@ -205,6 +205,7 @@ app.post('/login', async (req, res) => {
     req.session.save();
 
     // Redirect to /discover route after successful login
+    req.session.user = { username: user.username };  // Set user info in session
     res.redirect('/discover');
   } catch (error) {
     console.error('Login error:', error.message || error);
@@ -216,14 +217,22 @@ app.post('/login', async (req, res) => {
 
 
 
-// Authentication Middleware.
+
+
 const auth = (req, res, next) => {
   if (!req.session.user) {
-    // Default to login page.
-    return res.redirect('/login');
+    // Check if the request is expecting a JSON response (API call)
+    if (req.headers.accept && req.headers.accept.includes('application/json')) {
+      // For API calls, send 401 status code
+      return res.status(401).send('Not authenticated');
+    } else {
+      // For regular web requests, redirect to login page
+      return res.redirect('/login');
+    }
   }
   next();
 };
+
 
 // NEED TO ADD AUTHENTICATION!!! (use disocver example)
 // Authentication Required
@@ -287,6 +296,49 @@ app.get('/logout', (req, res) => {
 
   // handles profile 
     // renders page:
+    // app.get('/profile', (req, res) => {
+    //   if (!req.session.user) {
+    //     return res.status(401).send('Not authenticated');
+    //   }
+    //   try {
+    //     res.render('pages/profile', { username: req.session.user.username });
+    //   } catch (err) {
+    //     console.error('Profile error:', err);
+    //     res.status(500).send('Internal Server Error');
+    //   }
+    // });
+      
+  //sends json
+
+  // app.get('/profile', auth, (req, res) => {  // Use the auth middleware
+  //   try {
+  //     res.status(200).json({
+  //       username: req.session.user.username,
+  //     });
+  //   } catch (err) {
+  //     console.error('Profile error:', err);
+  //     res.status(500).send('Internal Server Error');
+  //   }
+  // });
+  
+
+
+  // WITH THE BELOW TWO CHANGES, ALLOWS THE TEST TO PASS BUT DOESNT RENDER PROFILE CORRECTLY, HAVE TO COMMENT OUT  JSON GET AND THE TEST TO RENDER CORRECTLY
+    // app.get('/profile', auth, (req, res) => {
+    //   try {
+    //     if (!req.session.user) {
+    //       return res.status(401).send('Not authenticated');
+    //     }
+    //     res.status(200).json({
+    //       username: req.session.user.username,
+    //     });
+    //   } catch (err) {
+    //     console.error('Profile error:', err);
+    //     res.status(500).send('Internal Server Error');
+    //   }
+    // });
+
+
     app.get('/profile', (req, res) => {
       if (!req.session.user) {
         return res.status(401).send('Not authenticated');
@@ -298,23 +350,33 @@ app.get('/logout', (req, res) => {
         res.status(500).send('Internal Server Error');
       }
     });
-    
-  //sends json
-  app.get('/profile', (req, res) => {
-    if (!req.session.user) {
-      return res.status(401).send('Not authenticated');
-    }
-    try {
-      res.status(200).json({
-        username: req.session.user.username,
-      });
-      
-    } catch (err) {
-      console.error('Profile error:', err);
-      res.status(500).send('Internal Server Error');
-    }
-  });
 
+    // app.get('/profile', auth, (req, res) => {
+    //   try {
+    //     if (!req.session.user) {
+    //       return res.status(401).send('Not authenticated');
+    //     }
+    
+    //     if (req.headers['accept'] && req.headers['accept'].includes('application/json')) {
+    //       // Return JSON response for tests
+    //       return res.status(200).json({
+    //         username: req.session.user.username,
+    //       });
+    //     }
+    
+    //     // Default behavior: render profile page
+    //     res.render('pages/profile', { username: req.session.user.username });
+    //   } catch (err) {
+    //     console.error('Profile error:', err);
+    //     res.status(500).send('Internal Server Error');
+    //   }
+    // });
+    
+    
+   
+
+
+  
   
   
   
