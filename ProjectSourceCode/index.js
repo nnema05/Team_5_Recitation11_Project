@@ -282,6 +282,40 @@ app.get('/logout', (req, res) => {
     }
     res.status(200).send("Welcome to the test route");
   });
+
+
+
+  // handles profile 
+    // renders page:
+    app.get('/profile', (req, res) => {
+      if (!req.session.user) {
+        return res.status(401).send('Not authenticated');
+      }
+      try {
+        res.render('pages/profile', { username: req.session.user.username });
+      } catch (err) {
+        console.error('Profile error:', err);
+        res.status(500).send('Internal Server Error');
+      }
+    });
+    
+  //sends json
+  app.get('/profile', (req, res) => {
+    if (!req.session.user) {
+      return res.status(401).send('Not authenticated');
+    }
+    try {
+      res.status(200).json({
+        username: req.session.user.username,
+      });
+      
+    } catch (err) {
+      console.error('Profile error:', err);
+      res.status(500).send('Internal Server Error');
+    }
+  });
+
+  
   
   
 

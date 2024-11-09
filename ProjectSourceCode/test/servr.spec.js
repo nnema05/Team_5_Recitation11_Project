@@ -124,6 +124,7 @@ describe('Testing register API', () => {
 //   });
 // });
 
+// render test
 describe('Testing Render', () => {
   // Sample test case given to test /test endpoint.
   it('test "/login" route should render with an html response', done => {
@@ -138,6 +139,7 @@ describe('Testing Render', () => {
   });
 });
 
+// profile negative and positive test cases!
 
 after(() => {
   db.$pool.end(); // Close the database connection
