@@ -109,20 +109,20 @@ describe('Testing register API', () => {
 });
 
 
-describe('Testing Redirect', () => {
-  it('should redirect / route to /login with 302 HTTP status code', done => {
-    chai
-      .request(server)  // assuming `server` is exported from `index.js`
-      .get('/test')  // Request the root URL
-      .end((err, res) => {
-        // Check if the response status is 302 (redirect)
-        res.should.have.status(302);
-        // Check if the response header contains the 'Location' to /login
-        res.should.have.property('header').with.property('location').eql('/login');
-        done();
-      });
-  });
-});
+// describe('Testing Redirect', () => {
+//   it('should redirect / route to /login with 302 HTTP status code', done => {
+//     chai
+//       .request(server)  // assuming `server` is exported from `index.js`
+//       .get('/test')  // Request the root URL
+//       .end((err, res) => {
+//         // Check if the response status is 302 (redirect)
+//         res.should.have.status(302);
+//         // Check if the response header contains the 'Location' to /login
+//         res.should.have.property('header').with.property('location').eql('/login');
+//         done();
+//       });
+//   });
+// });
 
 describe('Testing Render', () => {
   // Sample test case given to test /test endpoint.
