@@ -275,9 +275,31 @@ app.get('/logout', (req, res) => {
     });
   });  
 
+  // handles testing api!
+  app.get('/test', (req, res) => {
+    if (!req.session.user) {
+      return res.redirect(302, '/login');
+    }
+    res.status(200).send("Welcome to the test route");
+  });
+  
+  
+
 // *****************************************************
 // <!-- Section 5 : Start Server-->
 // *****************************************************
 // starting the server and keeping the connection open to listen for more requests
-module.exports = app.listen(3000);
-console.log('Server is listening on port 3000');
+// module.exports = app.listen(3000);
+// console.log('Server is listening on port 3000');
+
+// module.exports = { app: app.listen(3000), db };
+
+// Export `app` and `db` directly without listening immediately
+module.exports = { app, db };
+
+// Conditionally start the server if running the file directly
+if (require.main === module) {
+    app.listen(3000, () => {
+        console.log('Server is listening on port 3000');
+    });
+}
