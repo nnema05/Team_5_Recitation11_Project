@@ -1,0 +1,6 @@
+Monday 11/4 Meeting #2
+- This week we worked on the login page, registration page, discover page, header, footer and my closet. 
+- We were able to make a basic outline for all of these pages, and start linking them together. 
+- Our docker wasn't working completely during the meeting, however we were able to demo our code and get our docker working later. 
+- Our plan for next week is to finish up the html files, and start working on functionalities of our project. 
+
