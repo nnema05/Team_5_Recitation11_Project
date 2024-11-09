@@ -127,7 +127,7 @@ describe('Testing Render', () => {
   });
 });
 
-// profile negative and positive test cases!
+// PROFILE TEST CASE
 // describe('Profile Route Tests', () => {
 //   let agent;
 //   const testUser = {
