@@ -100,6 +100,10 @@ app.get('/discover', (req, res) => {
   res.render('pages/discover');
 })
 
+app.get('/mycloset', (req, res) => {
+  res.render('pages/mycloset');
+})
+
 // Register
 /* app.post('/register', async (req, res) => {
   try {
