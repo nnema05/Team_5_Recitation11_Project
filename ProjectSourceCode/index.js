@@ -135,55 +135,10 @@ app.get('/for-you', (req, res) => {
 
 
 // Register
-/* app.post('/register', async (req, res) => {
-  try {
-    // Hash the password using bcrypt library
-    const hash = await bcrypt.hash(req.body.password, 10);
-
-    // Insert username and hashed password into the 'users' table
-    await db.none('INSERT INTO users(username, password) VALUES($1, $2)', [req.body.username, hash]);
-
-    // Redirect to GET /login route after successful registration
-    res.redirect('/login');
-    res.status(200).json({ message: 'Success' });
-  } catch (error) {
-    console.error('Registration error:', error.message || error);
-    // Redirect back to the registration page if there's an error
-    res.redirect('/register');
-  }
-});
- */
-// app.post('/register', async (req, res) => {
-//   try {
-//     // Hash the password using bcrypt library
-//     const hash = await bcrypt.hash(req.body.password, 10);
-
-//     // Insert username and hashed password into the 'users' table
-//     await db.none('INSERT INTO users(username, password) VALUES($1, $2)', [req.body.username, hash]);
-
-//     // Check if the request came from the test case (using a specific header or query param)
-//     if (req.headers['x-test-request']) {
-//       return res.status(200).json({ message: 'Success' });
-//     }
-
-//     // Redirect to GET /login route after successful registration in normal operations
-//     res.redirect('/login');
-//   } catch (error) {
-//     console.error('Registration error:', error.message || error);
-
-//     // Send a JSON response if there's an error during testing
-//     if (req.headers['x-test-request']) {
-//       return res.status(500).json({ message: 'Error registering user' });
-//     }
-
-//     // Redirect back to the registration page if there's an error in normal operations
-//     res.redirect('/register');
-//   }
-// });
 
 app.post('/register', async (req, res) => {
   try {
-    // Validate input - check for non-empty username and password
+    // validate input -
     if (!req.body.username || !req.body.password) {
       if (req.headers['x-test-request']) {
         return res.status(400).json({ message: 'Invalid input' });
@@ -191,63 +146,63 @@ app.post('/register', async (req, res) => {
       return res.redirect('/register');
     }
 
-    // Hash the password using bcrypt library
+    // hash the password using bcrypt library
     const hash = await bcrypt.hash(req.body.password, 10);
 
-    // Insert username and hashed password into the 'users' table
+    // insert username and hashed password into the 'users' table
     await db.none('INSERT INTO users(username, password) VALUES($1, $2)', [req.body.username, hash]);
 
-    // Check if the request came from the test case (using a specific header or query param)
+    // check if the request came from the test case 
     if (req.headers['x-test-request']) {
       return res.status(200).json({ message: 'Success' });
     }
 
-    // Redirect to GET /login route after successful registration in normal operations
+    // redirect to GET /login route after successful registration in normal operations
     res.redirect('/login');
   } catch (error) {
     console.error('Registration error:', error.message || error);
 
-    // Send a JSON response if there's an error during testing
+    // send a JSON response if there's an error during testing
     if (req.headers['x-test-request']) {
       return res.status(500).json({ message: 'Error registering user' });
     }
 
-    // Redirect back to the registration page if there's an error in normal operations
+    // redirect back to the registration page if there's an error in normal operations
     res.redirect('/register');
   }
 });
 
 app.post('/login', async (req, res) => {
   try {
-    // Find the user in the users table
+    // find the user in the users table
     const user = await db.oneOrNone('SELECT * FROM users WHERE username = $1', [req.body.username]);
 
-    // Check if the user exists
+    // check if the user exists
     if (!user) {
-      // User not found, render login page with error message
+      // user not found, render login page 
       const message = "Username not found. Please register.";
       return res.render('pages/login', { message, error: true });
     }
 
-    // Compare the entered password with the hashed password in the database
+    // compare the entered password with the hashed password in the database
     const match = await bcrypt.compare(req.body.password, user.password);
 
     if (!match) {
-      // Password incorrect, render login page with error message
+      // password incorrect, render login page with error message
       const message = "Incorrect username or password.";
       return res.render('login', { message, error: true });
     }
 
-    // If the password is correct, save user details in session
+    // if the password is correct, save user details in session
     req.session.user = user;
     req.session.save();
 
-    // Redirect to /discover route after successful login
-    req.session.user = { username: user.username };  // Set user info in session
+    // redirect to /discover route after successful login
+    req.session.user = { username: user.username };  
     res.redirect('/discover');
   } catch (error) {
     console.error('Login error:', error.message || error);
-    // Render the login page with a generic error message
+   // error message login
     const message = "An error occurred during login. Please try again.";
     res.render('pages/login', { message, error: true });
   }
@@ -308,6 +263,7 @@ app.get('/discover', async (req, res) => {
 
 // Logout route
 app.get('/logout', (req, res) => {
+  
     req.session.destroy(err => {
       if (err) {
         // If there's an error during logout, you can log it and respond accordingly
@@ -383,6 +339,7 @@ app.get('/logout', (req, res) => {
       }
       try {
         res.render('pages/profile', { username: req.session.user.username });
+        res.should.be.html; // Expecting a HTML response
       } catch (err) {
         console.error('Profile error:', err);
         res.status(500).send('Internal Server Error');
