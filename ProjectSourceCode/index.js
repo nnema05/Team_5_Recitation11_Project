@@ -100,7 +100,7 @@ app.get('/discover', (req, res) => {
   res.render('pages/discover');
 })
 
-app.get('/mycloser', (req, res) => {
+app.get('/mycloset', (req, res) => {
   res.render('pages/mycloset');
 })
 
@@ -360,7 +360,7 @@ app.get('/logout', (req, res) => {
     });
 
     // app.get('/profile', auth, (req, res) => {
-    //   try {
+    //   try 
     //     if (!req.session.user) {
     //       return res.status(401).send('Not authenticated');
     //     }
@@ -379,6 +379,18 @@ app.get('/logout', (req, res) => {
     //     res.status(500).send('Internal Server Error');
     //   }
     // });
+
+    app.get('/mycloset', (req, res) => {
+      if (!req.session.user) {
+        return res.status(401).send('Not authenticated');
+      }
+      try {
+        res.render('pages/mycloset', { username: req.session.user.username });
+      } catch (err) {
+        console.error('My Closet error:', err);
+        res.status(500).send('Internal Server Error');
+      }
+    });
     
     
    

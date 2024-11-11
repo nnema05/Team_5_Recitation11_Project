@@ -1,26 +1,74 @@
-{{!-- Include the header --}}
-{{> head}}
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+  }
+  .profile-container {
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  .profile-container h1, .profile-container h2 {
+    color: #333333;
+    text-align: center;
+  }
+  .profile-details {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .profile-details p {
+    font-size: 16px;
+    color: #555555;
+  }
+  .btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px 0;
+    color: #ffffff;
+    background-color: #ff00c3;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 16px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+  }
+  .btn:hover {
+    background-color: #de0fa7;
+  }
+  .closet-preview, .discover-section {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .closet-preview p, .discover-section p {
+    font-size: 16px;
+    color: #666666;
+  }
+</style>
 
 <div class="profile-container">
-    <h1>{{user.name}}'s Profile</h1>
+  <h1>{{username}}'s Profile</h1>
 
-    <div class="profile-details">
-        <p><strong>Email:</strong> {{user.email}}</p>
-        <p><strong>Username:</strong> {{user.username}}</p>
-        <p><strong>Joined:</strong> {{user.joinDate}}</p>
-    </div>
+  <div class="profile-details">
+    <p><strong>Username:</strong> {{username}}</p>
+  </div>
 
-    <h2>Closet</h2>
-    <div class="closet-preview">
-        <p>View items in your closet:</p>
-        <a href="/mycloset" class="btn">Go to My Closet</a>
-    </div>
+  <h2>Closet</h2>
+  <div class="closet-preview">
+    <p>View items in your closet:</p>
+    <a href="/mycloset" class="btn">Go to My Closet</a>
+  </div>
 
-    <h2>Discover New Items</h2>
-    <div class="discover-section">
-        <p>Browse new items available:</p>
-        <a href="/discover" class="btn">Discover</a>
-    </div>
+  <h2>Discover New Items</h2>
+  <div class="discover-section">
+    <p>Browse new items available:</p>
+    <a href="/discover" class="btn">Discover</a>
+  </div>
 </div>
+
 {{!-- Include the footer --}}
 {{> footer}}
