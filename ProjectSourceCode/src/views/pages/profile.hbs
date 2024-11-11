@@ -71,57 +71,6 @@
     <p>Browse new items available:</p>
     <a href="/discover" class="btn">Discover</a>
   </div>
-
-
-    <h2>Popular Outfits</h2>
-  <div class="popular-outfits">
-    {{#if outfits}}
-      <div class="outfits-container">
-        {{#each outfits}}
-          <div class="outfit">
-            <img src="{{this.image}}" alt="{{this.title}}" />
-            <p>{{this.title}}</p>
-          </div>
-        {{/each}}
-      </div>
-    {{else}}
-      <p>No outfits to display at the moment.</p>
-    {{/if}}
-  </div>
-
-  <style>
-    .popular-outfits {
-      margin-top: 20px;
-      text-align: center;
-    }
-    .outfits-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 15px;
-      margin-top: 10px;
-    }
-    .outfit {
-      background: #fff;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      overflow: hidden;
-      max-width: 150px;
-      text-align: center;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
-    .outfit img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-    .outfit p {
-      margin: 10px;
-      font-size: 14px;
-      color: #555;
-    }
-  </style>
-
 </div>
 
 {{!-- Include the footer --}}
