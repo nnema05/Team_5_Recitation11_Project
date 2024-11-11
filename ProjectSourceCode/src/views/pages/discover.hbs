@@ -1,4 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>For You Page</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      margin: 0;
+      padding: 0;
+    }
+    .navbar {
+      background-color: #ff99cc;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .navbar-toggler-icon {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255,102,178,1)' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+    }
+    .nav-link {
+      color: white !important;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+    .nav-link:hover {
+      color: #ffccff !important;
+    }
+    .border-bottom {
+      border-bottom: 3px solid #ff66b2 !important;
+    }
+    .profile-container {
+      max-width: 900px;
+      margin: 20px auto;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .title {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+    .card-stack {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .content-card {
+      background-color: #e3e3e3;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      padding: 20px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .btn-swipe {
+      margin: 10px;
+    }
+  </style>
+</head>
+<body>
 
+
+
+<div class="profile-container">
+  <h1 class="title">Discover</h1>
+  
+  <main class="card-stack" id="cardStack">
+    {{#each personalizedContent}}
+      <div class="content-card" data-title="{{title}}" data-description="{{description}}">
+        <img src="{{imageUrl}}" alt="{{title}}" class="card-image">
+        <h4>{{title}}</h4>
+        <p>{{description}}</p>
+        <a href="{{url}}" class="btn btn-primary mt-3">Read More</a>
+      </div>
+    {{/each}}
+  </main>
+
+  <div class="text-center mt-5">
+    <button class="btn btn-danger btn-swipe" id="swipeLeft">Swipe Left</button>
+    <button class="btn btn-success btn-swipe" id="swipeRight">Swipe Right</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const cardStack = document.getElementById('cardStack');
+    let cards = Array.from(cardStack.getElementsByClassName('content-card'));
+    let currentPairIndex = 0;
+
+    function showPair() {
+      cards.forEach((card, index) => {
+        card.style.display = (index === currentPairIndex || index === currentPairIndex + 1) ? 'block' : 'none';
+      });
+    }
+
+    function swipe(direction) {
+      currentPairIndex = (currentPairIndex + 2) % cards.length;
+      showPair();
+    }
+
+    document.getElementById('swipeLeft').onclick = () => swipe('left');
+    document.getElementById('swipeRight').onclick = () => swipe('right');
+
+    showPair(); // Initial display of the first pair
+  });
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+{{!-- <!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discover Events</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+    <!-- Page Title -->
+    <h1 class="text-center mt-4">Discover Events</h1>
+
+    <!-- Message partial to display errors or messages -->
+    {{> message }}
+
+    
+</body>
+</html> --}}
+
+
+
+
+
+
+
+
+
+
+
+{{!-- <!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discover Events</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+    <!-- Page Title -->
+    <h1 class="text-center mt-4">Discover Events</h1>
+
+    <!-- Message partial to display errors or messages -->
+    {{> message }}
+
+    
+</body>
+</html> --}}
 
 
 {{!-- <!DOCTYPE html>
