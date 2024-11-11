@@ -8,7 +8,7 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f8f9fa;
+      background-color: #ffe6f0;
       margin: 0;
       padding: 0;
     }
@@ -30,13 +30,14 @@
     .border-bottom {
       border-bottom: 3px solid #ff66b2 !important;
     }
-    .profile-container {
-      max-width: 900px;
+      .profile-container {
+      max-width: 500px;
       margin: 20px auto;
-      background-color: #ffffff;
       padding: 20px;
+      background-color: #ff99cc;
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
     }
     .title {
       text-align: center;
@@ -47,13 +48,14 @@
     }
     .card-stack {
       display: grid;
+      text-align: center;
       grid-template-columns: 1fr 1fr;
       gap: 20px;
+      
     }
     .content-card {
-
-      background-color: #ffccff;
-
+      width: 100%;
+      background-color: #ffe6f0;
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       text-align: center;
@@ -63,59 +65,74 @@
     .btn-swipe {
       margin: 10px;
     }
-  </style>
-</head>
-<body>
 
-
-
-<div class="profile-container">
-  <h1 class="title">Discover</h1>
   
-  <main class="card-stack" id="cardStack">
-    {{#each personalizedContent}}
-      <div class="content-card" data-title="{{title}}" data-description="{{description}}">
-        <img src="{{imageUrl}}" alt="{{title}}" class="card-image">
-        <h4>{{title}}</h4>
-        <p>{{description}}</p>
-        <a href="{{url}}" class="btn btn-primary mt-3">Read More</a>
+
+  </style>
+
+
+  <div class="profile-container">
+    <h1 class="title">Discover</h1>
+    
+    <main class="card-stack" id="cardStack">
+      <div class="content-card" style="display: none;">
+        <h4>Card 1</h4>
+        <p>This is the first card.</p>
       </div>
-    {{/each}}
-  </main>
+      <div class="content-card" style="display: none;">
+        <h4>Card 2</h4>
+        <p>This is the second card.</p>
+      </div>
+      <div class="content-card" style="display: none;">
+        <h4>Card 3</h4>
+        <p>This is the third card.</p>
+      </div>
+    </main>
 
-  <div class="text-center mt-5">
-    <button class="btn btn-danger btn-swipe" id="swipeLeft">Swipe Left</button>
-    <button class="btn btn-success btn-swipe" id="swipeRight">Swipe Right</button>
+    <div class="text-center mt-5">
+      <button class="btn btn-danger btn-swipe" id="swipeLeft">Swipe Left</button>
+      <button class="btn btn-success btn-swipe" id="swipeRight">Swipe Right</button>
+    </div>
   </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const cardStack = document.getElementById('cardStack');
-    let cards = Array.from(cardStack.getElementsByClassName('content-card'));
-    let currentPairIndex = 0;
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const cardStack = document.getElementById('cardStack');
+      let cards = Array.from(cardStack.getElementsByClassName('content-card'));
 
-    function showPair() {
-      cards.forEach((card, index) => {
-        card.style.display = (index === currentPairIndex || index === currentPairIndex + 1) ? 'block' : 'none';
-      });
-    }
+      if (!cards.length) {
+        console.error("No cards found in the stack.");
+        return;
+      }
 
-    function swipe(direction) {
-      currentPairIndex = (currentPairIndex + 2) % cards.length;
-      showPair();
-    }
+      let currentIndex = 0;
 
-    document.getElementById('swipeLeft').onclick = () => swipe('left');
-    document.getElementById('swipeRight').onclick = () => swipe('right');
+      function showCard() {
+        cards.forEach((card, index) => {
+          card.style.display = index === currentIndex ? 'block' : 'none';
+        });
+      }
 
-    showPair(); // Initial display of the first pair
-  });
-</script>
+      function swipe(direction) {
+        if (direction === 'left') {
+          currentIndex = (currentIndex - 1 + cards.length) % cards.length;
+        } else if (direction === 'right') {
+          currentIndex = (currentIndex + 1) % cards.length;
+        }
+        showCard();
+      }
 
+      document.getElementById('swipeLeft').onclick = () => swipe('left');
+      document.getElementById('swipeRight').onclick = () => swipe('right');
+
+      showCard(); // Initial display of the first card
+    });
+  </script>
 </body>
 </html>
+
+
 
 
 

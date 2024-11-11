@@ -104,6 +104,36 @@ app.get('/mycloset', (req, res) => {
   res.render('pages/mycloset');
 })
 
+
+
+// FOR FOR YOU PAGE 
+app.get('/for-you', (req, res) => {
+  const personalizedContent = [
+    {
+      title: "Card 1",
+      description: "This is the first card.",
+      //imageUrl: 
+      url: "#"
+    },
+    {
+      title: "Card 2",
+      description: "This is the second card.",
+      //imageUrl: 
+      //url: "#"
+    },
+    {
+      title: "Card 3",
+      description: "This is the third card.",
+      //imageUrl: 
+      //url: "#"
+    }
+  ];
+  
+  res.render('forYouPage', { personalizedContent });
+});
+
+
+
 // Register
 /* app.post('/register', async (req, res) => {
   try {
