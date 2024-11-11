@@ -356,7 +356,7 @@ app.get('/logout', (req, res) => {
     });
 
     // app.get('/profile', auth, (req, res) => {
-    //   try {
+    //   try 
     //     if (!req.session.user) {
     //       return res.status(401).send('Not authenticated');
     //     }
