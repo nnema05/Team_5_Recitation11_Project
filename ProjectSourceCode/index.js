@@ -96,6 +96,14 @@ app.get('/register', (req, res) => {
   res.render('pages/register');
 })
 
+app.get('/discover', (req, res) => {
+  res.render('pages/discover');
+})
+
+app.get('/mycloser', (req, res) => {
+  res.render('pages/mycloset');
+})
+
 // Register
 /* app.post('/register', async (req, res) => {
   try {

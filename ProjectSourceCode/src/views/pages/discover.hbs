@@ -1,3 +1,207 @@
+<!-- TODO: Make this a for you page? -->
+
+<head>
+
+  
+  <!-- Embedded CSS for Card Stack with Outlines -->
+  <style>
+    body {
+      background-color: #f8f9fa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 400px;
+    }
+
+     .title {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+
+   
+
+    .card-stack {
+      position: relative;
+      width: 100%;
+      height: 500px;
+    }
+
+    .content-card {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-color: #e3e3e3; /* Light grey for contrast */
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      padding: 20px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      display: block; /* Ensure visibility */
+    }
+
+    /* Outlines for second and third cards */
+    .content-card:nth-child(1) {
+      transform: translateY(10px) scale(0.98);
+      border: 1px solid #020000;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .content-card:nth-child(2) {
+      transform: translateY(20px) scale(0.96);
+      border: 1px solid #020000;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-image {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+
+    .btn-swipe {
+      margin: 10px;
+    }
+
+    /* Swipe left/right animations */
+    .swipe-left {
+      transform: translateX(-150%) rotate(-20deg);
+      opacity: 0;
+    }
+
+    .swipe-right {
+      transform: translateX(150%) rotate(20deg);
+      opacity: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+  
+
+    <!-- Title without background color -->
+    <div class="title">Discover</div>
+
+
+    <main class="card-stack" id="cardStack">
+      {{#each personalizedContent}}
+        <div class="content-card" data-title="{{title}}" data-description="{{description}}">
+          <img src="{{imageUrl}}" alt="{{title}}" class="card-image">
+          <h4>{{title}}</h4>
+          <p>{{description}}</p>
+          <a href="{{url}}" class="btn btn-primary mt-5">Read More</a>
+        </div>
+      {{/each}}
+
+      <div class="swiper-container"> <div class="swiper-wrapper"> 
+        {{#each personalizedContent}} 
+        <div class="swiper-slide content-card"> 
+            <img src="{{imageUrl}}" alt="{{title}}" class="card-image">
+            <h2>{{title}}</h2>
+            <p>{{description}}</p>
+            <a href="{{url}}" class="read-more">Read More</a> 
+        </div> {{/each}} </div>
+    </main>
+
+    <!-- Swipe buttons for non-touch devices -->
+    <div class="text-center mt-5">
+      <button class="btn btn-danger btn-swipe" id="swipeLeft">Swipe Left</button>
+      <button class="btn btn-success btn-swipe" id="swipeRight">Swipe Right</button>
+    </div>
+  </div>
+
+  <!-- JavaScript for swipe handling -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const cardStack = document.getElementById('cardStack');
+      let cards = Array.from(cardStack.getElementsByClassName('content-card'));
+      
+      // Set the top card to be interactive
+      let currentCardIndex = 0;
+      const currentCard = () => cards[currentCardIndex];
+      
+      // Function to remove a card from the stack
+      function removeCard(direction) {
+        if (currentCardIndex >= cards.length) return;
+
+        const card = currentCard();
+        card.classList.add(direction === 'left' ? 'swipe-left' : 'swipe-right');
+        
+        // Wait for animation to finish
+        setTimeout(() => {
+          card.style.display = 'none';
+          currentCardIndex++;
+          if (currentCardIndex < cards.length) {
+            cards[currentCardIndex].style.display = 'block';
+          } else {
+            loadNewCards();
+          }
+        }, 300);
+      }
+
+      // Swipe button handlers
+      document.getElementById('swipeLeft').onclick = () => removeCard('left');
+      document.getElementById('swipeRight').onclick = () => removeCard('right');
+
+      // Touch events for swipe
+      let startX = 0;
+      cardStack.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+      });
+      
+      cardStack.addEventListener('touchend', (e) => {
+        const endX = e.changedTouches[0].clientX;
+        const diffX = endX - startX;
+        
+        if (Math.abs(diffX) > 50) {
+          removeCard(diffX > 0 ? 'right' : 'left');
+        }
+      });
+
+      // Load new cards function
+      function loadNewCards() {
+        const newCards = [
+          { imageUrl: '/images/image4.jpg', title: 'New Card 1', description: 'This is a new card.', url: '/card-4' },
+          { imageUrl: '/images/image5.jpg', title: 'New Card 2', description: 'This is another new card.', url: '/card-5' },
+        ];
+
+        newCards.forEach(cardData => {
+          const card = document.createElement('div');
+          card.className = 'content-card';
+          card.innerHTML = `
+            <img src="${cardData.imageUrl}" alt="${cardData.title}" class="card-image">
+            <h4>${cardData.title}</h4>
+            <p>${cardData.description}</p>
+            <a href="${cardData.url}" class="btn btn-primary mt-5">Read More</a>
+          `;
+          cardStack.appendChild(card);
+          cards.push(card);
+        });
+
+        currentCardIndex = 0;
+        cards[currentCardIndex].style.display = 'block';
+      }
+    });
+  </script>
+</body>
+{{> footer}}
+</html>
+
+
+
+
+
+
+
 
 
 
