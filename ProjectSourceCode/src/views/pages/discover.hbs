@@ -1,200 +1,120 @@
-<!-- TODO: Make this a for you page? -->
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-
-  
-  <!-- Embedded CSS for Card Stack with Outlines -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>For You Page</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
+      font-family: Arial, sans-serif;
       background-color: #f8f9fa;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
       margin: 0;
+      padding: 0;
     }
-
-    .container {
-      width: 100%;
-      max-width: 400px;
+    .navbar {
+      background-color: #ff99cc;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     }
-
-     .title {
+    .navbar-toggler-icon {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255,102,178,1)' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+    }
+    .nav-link {
+      color: white !important;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+    .nav-link:hover {
+      color: #ffccff !important;
+    }
+    .border-bottom {
+      border-bottom: 3px solid #ff66b2 !important;
+    }
+    .profile-container {
+      max-width: 900px;
+      margin: 20px auto;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .title {
       text-align: center;
       font-size: 1.5rem;
       font-weight: bold;
       margin-top: 20px;
       margin-bottom: 20px;
     }
-
-   
-
     .card-stack {
-      position: relative;
-      width: 100%;
-      height: 500px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
     }
-
     .content-card {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background-color: #e3e3e3; /* Light grey for contrast */
+      background-color: #ffccff;
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       text-align: center;
       padding: 20px;
       transition: transform 0.3s ease, opacity 0.3s ease;
-      display: block; /* Ensure visibility */
     }
-
-    /* Outlines for second and third cards */
-    .content-card:nth-child(1) {
-      transform: translateY(10px) scale(0.98);
-      border: 1px solid #020000;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-    }
-
-    .content-card:nth-child(2) {
-      transform: translateY(20px) scale(0.96);
-      border: 1px solid #020000;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .card-image {
-      width: 100%;
-      height: auto;
-      border-radius: 8px;
-      margin-bottom: 15px;
-    }
-
     .btn-swipe {
       margin: 10px;
-    }
-
-    /* Swipe left/right animations */
-    .swipe-left {
-      transform: translateX(-150%) rotate(-20deg);
-      opacity: 0;
-    }
-
-    .swipe-right {
-      transform: translateX(150%) rotate(20deg);
-      opacity: 0;
     }
   </style>
 </head>
 <body>
-  <div class="container">
+
+
+
+<div class="profile-container">
+  <h1 class="title">Discover</h1>
   
+  <main class="card-stack" id="cardStack">
+    {{#each personalizedContent}}
+      <div class="content-card" data-title="{{title}}" data-description="{{description}}">
+        <img src="{{imageUrl}}" alt="{{title}}" class="card-image">
+        <h4>{{title}}</h4>
+        <p>{{description}}</p>
+        <a href="{{url}}" class="btn btn-primary mt-3">Read More</a>
+      </div>
+    {{/each}}
+  </main>
 
-    <!-- Title without background color -->
-    <div class="title">Discover</div>
-
-
-    <main class="card-stack" id="cardStack">
-      {{#each personalizedContent}}
-        <div class="content-card" data-title="{{title}}" data-description="{{description}}">
-          <img src="{{imageUrl}}" alt="{{title}}" class="card-image">
-          <h4>{{title}}</h4>
-          <p>{{description}}</p>
-          <a href="{{url}}" class="btn btn-primary mt-5">Read More</a>
-        </div>
-      {{/each}}
-
-      <div class="swiper-container"> <div class="swiper-wrapper"> 
-        {{#each personalizedContent}} 
-        <div class="swiper-slide content-card"> 
-            <img src="{{imageUrl}}" alt="{{title}}" class="card-image">
-            <h2>{{title}}</h2>
-            <p>{{description}}</p>
-            <a href="{{url}}" class="read-more">Read More</a> 
-        </div> {{/each}} </div>
-    </main>
-
-    <!-- Swipe buttons for non-touch devices -->
-    <div class="text-center mt-5">
-      <button class="btn btn-danger btn-swipe" id="swipeLeft">Swipe Left</button>
-      <button class="btn btn-success btn-swipe" id="swipeRight">Swipe Right</button>
-    </div>
+  <div class="text-center mt-5">
+    <button class="btn btn-danger btn-swipe" id="swipeLeft">Swipe Left</button>
+    <button class="btn btn-success btn-swipe" id="swipeRight">Swipe Right</button>
   </div>
+</div>
 
-  <!-- JavaScript for swipe handling -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const cardStack = document.getElementById('cardStack');
-      let cards = Array.from(cardStack.getElementsByClassName('content-card'));
-      
-      // Set the top card to be interactive
-      let currentCardIndex = 0;
-      const currentCard = () => cards[currentCardIndex];
-      
-      // Function to remove a card from the stack
-      function removeCard(direction) {
-        if (currentCardIndex >= cards.length) return;
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const cardStack = document.getElementById('cardStack');
+    let cards = Array.from(cardStack.getElementsByClassName('content-card'));
+    let currentPairIndex = 0;
 
-        const card = currentCard();
-        card.classList.add(direction === 'left' ? 'swipe-left' : 'swipe-right');
-        
-        // Wait for animation to finish
-        setTimeout(() => {
-          card.style.display = 'none';
-          currentCardIndex++;
-          if (currentCardIndex < cards.length) {
-            cards[currentCardIndex].style.display = 'block';
-          } else {
-            loadNewCards();
-          }
-        }, 300);
-      }
-
-      // Swipe button handlers
-      document.getElementById('swipeLeft').onclick = () => removeCard('left');
-      document.getElementById('swipeRight').onclick = () => removeCard('right');
-
-      // Touch events for swipe
-      let startX = 0;
-      cardStack.addEventListener('touchstart', (e) => {
-        startX = e.touches[0].clientX;
+    function showPair() {
+      cards.forEach((card, index) => {
+        card.style.display = (index === currentPairIndex || index === currentPairIndex + 1) ? 'block' : 'none';
       });
-      
-      cardStack.addEventListener('touchend', (e) => {
-        const endX = e.changedTouches[0].clientX;
-        const diffX = endX - startX;
-        
-        if (Math.abs(diffX) > 50) {
-          removeCard(diffX > 0 ? 'right' : 'left');
-        }
-      });
+    }
 
-      // Load new cards function
-      function loadNewCards() {
-        const newCards = [
-          { imageUrl: '/images/image4.jpg', title: 'New Card 1', description: 'This is a new card.', url: '/card-4' },
-          { imageUrl: '/images/image5.jpg', title: 'New Card 2', description: 'This is another new card.', url: '/card-5' },
-        ];
+    function swipe(direction) {
+      currentPairIndex = (currentPairIndex + 2) % cards.length;
+      showPair();
+    }
 
-        newCards.forEach(cardData => {
-          const card = document.createElement('div');
-          card.className = 'content-card';
-          card.innerHTML = `
-            <img src="${cardData.imageUrl}" alt="${cardData.title}" class="card-image">
-            <h4>${cardData.title}</h4>
-            <p>${cardData.description}</p>
-            <a href="${cardData.url}" class="btn btn-primary mt-5">Read More</a>
-          `;
-          cardStack.appendChild(card);
-          cards.push(card);
-        });
+    document.getElementById('swipeLeft').onclick = () => swipe('left');
+    document.getElementById('swipeRight').onclick = () => swipe('right');
 
-        currentCardIndex = 0;
-        cards[currentCardIndex].style.display = 'block';
-      }
-    });
-  </script>
+    showPair(); // Initial display of the first pair
+  });
+</script>
+
 </body>
-{{> footer}}
 </html>
+
 
 
 
