@@ -105,71 +105,70 @@ describe('Testing Render', () => {
   });
 });
 
-// PROFILE TEST CASE- NOT WORKING SAD
+// NEW LOGIN TESTS!!
+describe('Testing login API', () => {
+  const testUser = {
+    username: 'john_doe',
+    password: 'password123',
+  };
 
-// ATTEMPT 1!!!! --> THIS IS HTML RESPONSE
-// describe('Profile Route Tests', () => {
-//   let agent;
-//   const testUser = {
-//     username: 'testuser',
-//     password: 'testpass123',
-//   };
+  before(async () => {
+    // Ensure the user table is clean, then insert a test user with a hashed password
+    await db.none('TRUNCATE TABLE users CASCADE');
+    const hashedPassword = await bcryptjs.hash(testUser.password, 10);
+    await db.none('INSERT INTO users (username, password) VALUES ($1, $2)', [
+      testUser.username,
+      hashedPassword,
+    ]);
+  });
 
-//   before(async () => {
-//     // clear users table and create test user
-//     await db.query('TRUNCATE TABLE users CASCADE');
-//     const hashedPassword = await bcryptjs.hash(testUser.password, 10);
-//     await db.query('INSERT INTO users (username, password) VALUES ($1, $2)', [
-//       testUser.username,
-//       hashedPassword,
-//     ]);
-//   });
+  after(async () => {
+    // Clean up by truncating the users table
+    await db.none('TRUNCATE TABLE users CASCADE');
+  });
 
-//   beforeEach(() => {
-//     // new agent for session handling
-//     agent = chai.request.agent(app);
-//   });
+  // Positive test case: valid login credentials
+  it('positive : /login with correct credentials', done => {
+    chai
+      .request(server)
+      .post('/login')
+      .set('x-test-request', 'true') // Custom header for test request
+      .send({ username: testUser.username, password: testUser.password })
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        expect(res.body.message).to.equals('Login successful');
+        done();
+      });
+  });
 
-//   afterEach(() => {
-//     // Clear cookie after each test
-//     agent.close();
-//   });
+  // Negative test case: incorrect password
+  it('negative : /login with incorrect password', done => {
+    chai
+      .request(server)
+      .post('/login')
+      .set('x-test-request', 'true')
+      .send({ username: testUser.username, password: 'wrongpassword' })
+      .end((err, res) => {
+        expect(res).to.have.status(401);
+        expect(res.body.message).to.equals('Incorrect username or password.');
+        done();
+      });
+  });
 
-//   after(async () => {
-//     // clean up database
-//     await db.query('TRUNCATE TABLE users CASCADE');
-//   });
-
-//   describe('GET /profile', () => {
-    
-//    // DOES NOT LOGIN!
-//      // negative test case
-//     it('should return 401 if user is not authenticated', done => {
-//       agent.get('/logout').end()
-//       chai
-//         .request(app)
-//         .get('/profile')
-//         .end((err, res) => {
-//           expect(res).to.have.status(401);
-//           expect(res.text).to.equal('Not authenticated');
-//           done();
-//         });
-//     });
-
-//     // positive test case
-//     it('should return user profile when authenticated', async () => {
-//       // first login
-//       await agent.post('/login').send(testUser);
-
-//       // access profile
-//       const res = await agent.get('/profile');
-
-//       expect(res).to.have.status(200);
-//       expect(res.text).to.include(`<h1>${testUser.username}'s Profile</h1>`);
-//     });
-// });
-
-// });
+  // Negative test case: username not found
+  it('negative : /login with non-existent username', done => {
+    chai
+      .request(server)
+      .post('/login')
+      .set('x-test-request', 'true')
+      .send({ username: 'nonexistent', password: 'password123' })
+      .end((err, res) => {
+        expect(res).to.have.status(401);
+        expect(res.body.message).to.equals('Username not found. Please register.');
+        done();
+      });
+  });
+});
 
 
 

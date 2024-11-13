@@ -172,38 +172,90 @@ app.post('/register', async (req, res) => {
   }
 });
 
+// OLD LOGIN ROUTE--> DONT DELETE UNTIL VERY END!!!
+// app.post('/login', async (req, res) => {
+//   try {
+//     // find the user in the users table
+//     const user = await db.oneOrNone('SELECT * FROM users WHERE username = $1', [req.body.username]);
+
+//     // check if the user exists
+//     if (!user) {
+//       // user not found, render login page 
+//       const message = "Username not found. Please register.";
+//       // return res.render('pages/login', { message, error: true });
+//       return res.status(401).render('pages/login', { message, error: true });
+//     }
+
+//     // compare the entered password with the hashed password in the database
+//     const match = await bcrypt.compare(req.body.password, user.password);
+
+//     if (!match) {
+//       // password incorrect, render login page with error message
+//       const message = "Incorrect username or password.";
+//       // return res.render('login', { message, error: true });
+//       return res.status(401).render('pages/login', { message, error: true });
+
+//     }
+
+//     // if the password is correct, save user details in session
+//     req.session.user = user;
+//     req.session.save();
+
+//     // redirect to /discover route after successful login
+//     req.session.user = { username: user.username };  
+//     res.redirect('/discover');
+//   } catch (error) {
+//     console.error('Login error:', error.message || error);
+//    // error message login
+//     const message = "An error occurred during login. Please try again.";
+//     res.render('pages/login', { message, error: true });
+//   }
+// });
+
 app.post('/login', async (req, res) => {
   try {
-    // find the user in the users table
+    // Find the user in the users table
     const user = await db.oneOrNone('SELECT * FROM users WHERE username = $1', [req.body.username]);
 
-    // check if the user exists
+    // Check if the user exists
     if (!user) {
-      // user not found, render login page 
       const message = "Username not found. Please register.";
+      if (req.headers['x-test-request']) {
+        return res.status(401).json({ message });
+      }
       return res.render('pages/login', { message, error: true });
     }
 
-    // compare the entered password with the hashed password in the database
+    // Compare the entered password with the hashed password in the database
     const match = await bcrypt.compare(req.body.password, user.password);
 
     if (!match) {
-      // password incorrect, render login page with error message
       const message = "Incorrect username or password.";
-      return res.render('login', { message, error: true });
+      if (req.headers['x-test-request']) {
+        return res.status(401).json({ message });
+      }
+      return res.render('pages/login', { message, error: true });
     }
 
-    // if the password is correct, save user details in session
-    req.session.user = user;
+    // If the password is correct, save user details in session
+    req.session.user = { username: user.username };
     req.session.save();
 
-    // redirect to /discover route after successful login
-    req.session.user = { username: user.username };  
+    if (req.headers['x-test-request']) {
+      return res.status(200).json({ message: 'Login successful' });
+    }
+
+    // Redirect to /discover route after successful login
     res.redirect('/discover');
   } catch (error) {
     console.error('Login error:', error.message || error);
-   // error message login
+
     const message = "An error occurred during login. Please try again.";
+    if (req.headers['x-test-request']) {
+      return res.status(500).json({ message });
+    }
+
+    // Render login page with error message in normal operations
     res.render('pages/login', { message, error: true });
   }
 });
@@ -339,7 +391,7 @@ app.get('/logout', (req, res) => {
       }
       try {
         res.render('pages/profile', { username: req.session.user.username });
-        res.should.be.html; // Expecting a HTML response
+       //  res.should.be.html; // Expecting a HTML response
       } catch (err) {
         console.error('Profile error:', err);
         res.status(500).send('Internal Server Error');
