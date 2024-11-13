@@ -272,7 +272,8 @@ const auth = (req, res, next) => {
       return res.status(401).send('Not authenticated');
     } else {
       // For regular web requests, redirect to login page
-      return res.redirect('/login');
+      // return res.redirect('/login');
+      res.should.redirectTo(/^.*127\.0\.0\.1.*\/login$/);
     }
   }
   next();
@@ -332,12 +333,17 @@ app.get('/logout', (req, res) => {
 
   // handles testing api!
   app.get('/test', (req, res) => {
-    if (!req.session.user) {
-      return res.redirect(302, '/login');
+    try {
+      if (!req.session.user) {
+        return res.redirect(302, '/login');
+      }
+      res.status(200).send("Welcome to the test route");
+    } catch (error) {
+      console.error("Error in /test route:", error);
+      res.status(500).send("Server error");
     }
-    res.status(200).send("Welcome to the test route");
   });
-
+  
 
 
   // handles profile 

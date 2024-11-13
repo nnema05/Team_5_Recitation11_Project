@@ -83,8 +83,12 @@ describe('Testing register API', () => {
 //       .request(server)
 //       .get('/test')
 //       .end((err, res) => {
-//         res.should.have.status(302); // Expecting a redirect status code
-//         res.should.redirectTo(/^.*127\.0\.0\.1.*\/login$/); // Expecting a redirect to /login with the mentioned Regex
+//         if (err) {
+//           console.error('Test error:', err.message); // Log test error
+//           return done(err); // Exit with error for more detail
+//         }
+//         res.should.have.status(302);
+//         res.should.redirectTo(/^.*127\.0\.0\.1.*\/login$/);
 //         done();
 //       });
 //   });
