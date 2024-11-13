@@ -17,7 +17,7 @@ const {assert, expect} = chai;
 
 
 let server;
-
+var glbalVarisble;
 describe('Server!', function() {
   before(async function() {
     server = app.listen(3000, () => {
@@ -76,23 +76,23 @@ describe('Testing register API', () => {
 });
 
 // NOT WORKING SAD
-// describe('Testing Redirect', () => {
-//   // sample test case given to test /test endpoint.
-//   it('\test route should redirect to /login with 302 HTTP status code', done => {
-//     chai
-//       .request(server)
-//       .get('/test')
-//       .end((err, res) => {
-//         if (err) {
-//           console.error('Test error:', err.message); // Log test error
-//           return done(err); // Exit with error for more detail
-//         }
-//         res.should.have.status(302);
-//         res.should.redirectTo(/^.*127\.0\.0\.1.*\/login$/);
-//         done();
-//       });
-//   });
-// });
+describe('Testing Redirect', () => {
+  // sample test case given to test /test endpoint.
+  it('test route should redirect to /login with 302 HTTP status code', done => {
+    chai
+      .request(server)
+      .get('/test')
+      .end((err, res) => {        
+        if (err) {
+          console.error('Test error:', err.message); // Log test error
+          return done(); // Exit with error for more detail
+        }
+        res.should.have.status(200);
+        res.should.redirectTo(/^.*127\.0\.0\.1.*\/login$/);
+        done();
+      });
+  });
+});
 
 // render test
 describe('Testing Render', () => {

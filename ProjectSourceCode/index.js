@@ -20,15 +20,15 @@ app.use(express.static('public'));
 
 // create `ExpressHandlebars` instance and configure the layouts and partials dir.
 const hbs = handlebars.create({
-    extname: 'hbs',
-    layoutsDir: __dirname + '/src/views/layouts',
-    partialsDir: __dirname + '/src/views/partials',
+  extname: 'hbs',
+  layoutsDir: __dirname + '/src/views/layouts',
+  partialsDir: __dirname + '/src/views/partials',
 });
 
 console.log(__dirname, path.join(__dirname, 'src', 'views'))
 app.set('views', path.join(__dirname, 'src', 'views'));
 app.use(express.static(path.join(__dirname, 'resources'))); // Updated path to serve static files
-  
+
 // database configuration
 const dbConfig = {
   host: 'db', // the database server
@@ -81,7 +81,7 @@ app.use(
 
 // TODO - Include your API routes here
 app.get('/welcome', (req, res) => {
-  res.json({status: 'success', message: 'Welcome!'});
+  res.json({ status: 'success', message: 'Welcome!' });
 });
 
 app.get('/', (req, res) => {
@@ -128,7 +128,7 @@ app.get('/for-you', (req, res) => {
       //url: "#"
     }
   ];
-  
+
   res.render('forYouPage', { personalizedContent });
 });
 
@@ -279,6 +279,16 @@ const auth = (req, res, next) => {
   next();
 };
 
+// handles testing api!
+app.get('/test', (req, res) => {
+
+  console.log("============= REDIRECTING TO LOGIN=============");      
+  if (!req.session.user) {
+    return res.redirect(302,'/login');
+  }
+  res.status(200).send("Welcome to the test route");
+
+});
 
 // NEED TO ADD AUTHENTICATION!!! (use disocver example)
 // Authentication Required
@@ -316,135 +326,124 @@ app.get('/discover', async (req, res) => {
 
 // Logout route
 app.get('/logout', (req, res) => {
-  
-    req.session.destroy(err => {
-      if (err) {
-        // If there's an error during logout, you can log it and respond accordingly
-        console.error('Session destruction error:', err);
-        return res.status(500).send('Could not log out.');
-      }
-      // Render the logout page with a success message
-      res.render('pages/logout', {
-        message: 'Logged out Successfully',
-        error: false
-      });
-    });
-  });  
 
-  // handles testing api!
-  app.get('/test', (req, res) => {
-    try {
-      if (!req.session.user) {
-        return res.redirect(302, '/login');
-      }
-      res.status(200).send("Welcome to the test route");
-    } catch (error) {
-      console.error("Error in /test route:", error);
-      res.status(500).send("Server error");
+  req.session.destroy(err => {
+    if (err) {
+      // If there's an error during logout, you can log it and respond accordingly
+      console.error('Session destruction error:', err);
+      return res.status(500).send('Could not log out.');
     }
+    // Render the logout page with a success message
+    res.render('pages/logout', {
+      message: 'Logged out Successfully',
+      error: false
+    });
   });
-  
+});
 
 
-  // handles profile 
-    // renders page:
-    // app.get('/profile', (req, res) => {
-    //   if (!req.session.user) {
-    //     return res.status(401).send('Not authenticated');
-    //   }
-    //   try {
-    //     res.render('pages/profile', { username: req.session.user.username });
-    //   } catch (err) {
-    //     console.error('Profile error:', err);
-    //     res.status(500).send('Internal Server Error');
-    //   }
-    // });
-      
-  //sends json
-
-  // app.get('/profile', auth, (req, res) => {  // Use the auth middleware
-  //   try {
-  //     res.status(200).json({
-  //       username: req.session.user.username,
-  //     });
-  //   } catch (err) {
-  //     console.error('Profile error:', err);
-  //     res.status(500).send('Internal Server Error');
-  //   }
-  // });
-  
 
 
-  // WITH THE BELOW TWO CHANGES, ALLOWS THE TEST TO PASS BUT DOESNT RENDER PROFILE CORRECTLY, HAVE TO COMMENT OUT  JSON GET AND THE TEST TO RENDER CORRECTLY
-    // app.get('/profile', auth, (req, res) => {
-    //   try {
-    //     if (!req.session.user) {
-    //       return res.status(401).send('Not authenticated');
-    //     }
-    //     res.status(200).json({
-    //       username: req.session.user.username,
-    //     });
-    //   } catch (err) {
-    //     console.error('Profile error:', err);
-    //     res.status(500).send('Internal Server Error');
-    //   }
-    // });
+
+// handles profile 
+// renders page:
+// app.get('/profile', (req, res) => {
+//   if (!req.session.user) {
+//     return res.status(401).send('Not authenticated');
+//   }
+//   try {
+//     res.render('pages/profile', { username: req.session.user.username });
+//   } catch (err) {
+//     console.error('Profile error:', err);
+//     res.status(500).send('Internal Server Error');
+//   }
+// });
+
+//sends json
+
+// app.get('/profile', auth, (req, res) => {  // Use the auth middleware
+//   try {
+//     res.status(200).json({
+//       username: req.session.user.username,
+//     });
+//   } catch (err) {
+//     console.error('Profile error:', err);
+//     res.status(500).send('Internal Server Error');
+//   }
+// });
 
 
-    app.get('/profile', (req, res) => {
-      if (!req.session.user) {
-        return res.status(401).send('Not authenticated');
-      }
-      try {
-        res.render('pages/profile', { username: req.session.user.username });
-       //  res.should.be.html; // Expecting a HTML response
-      } catch (err) {
-        console.error('Profile error:', err);
-        res.status(500).send('Internal Server Error');
-      }
-    });
 
-    // app.get('/profile', auth, (req, res) => {
-    //   try 
-    //     if (!req.session.user) {
-    //       return res.status(401).send('Not authenticated');
-    //     }
-    
-    //     if (req.headers['accept'] && req.headers['accept'].includes('application/json')) {
-    //       // Return JSON response for tests
-    //       return res.status(200).json({
-    //         username: req.session.user.username,
-    //       });
-    //     }
-    
-    //     // Default behavior: render profile page
-    //     res.render('pages/profile', { username: req.session.user.username });
-    //   } catch (err) {
-    //     console.error('Profile error:', err);
-    //     res.status(500).send('Internal Server Error');
-    //   }
-    // });
-
-    app.get('/mycloset', (req, res) => {
-      if (!req.session.user) {
-        return res.status(401).send('Not authenticated');
-      }
-      try {
-        res.render('pages/mycloset', { username: req.session.user.username });
-      } catch (err) {
-        console.error('My Closet error:', err);
-        res.status(500).send('Internal Server Error');
-      }
-    });
-    
-    
-   
+// WITH THE BELOW TWO CHANGES, ALLOWS THE TEST TO PASS BUT DOESNT RENDER PROFILE CORRECTLY, HAVE TO COMMENT OUT  JSON GET AND THE TEST TO RENDER CORRECTLY
+// app.get('/profile', auth, (req, res) => {
+//   try {
+//     if (!req.session.user) {
+//       return res.status(401).send('Not authenticated');
+//     }
+//     res.status(200).json({
+//       username: req.session.user.username,
+//     });
+//   } catch (err) {
+//     console.error('Profile error:', err);
+//     res.status(500).send('Internal Server Error');
+//   }
+// });
 
 
-  
-  
-  
-  
+app.get('/profile', (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).send('Not authenticated');
+  }
+  try {
+    res.render('pages/profile', { username: req.session.user.username });
+    //  res.should.be.html; // Expecting a HTML response
+  } catch (err) {
+    console.error('Profile error:', err);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+// app.get('/profile', auth, (req, res) => {
+//   try 
+//     if (!req.session.user) {
+//       return res.status(401).send('Not authenticated');
+//     }
+
+//     if (req.headers['accept'] && req.headers['accept'].includes('application/json')) {
+//       // Return JSON response for tests
+//       return res.status(200).json({
+//         username: req.session.user.username,
+//       });
+//     }
+
+//     // Default behavior: render profile page
+//     res.render('pages/profile', { username: req.session.user.username });
+//   } catch (err) {
+//     console.error('Profile error:', err);
+//     res.status(500).send('Internal Server Error');
+//   }
+// });
+
+app.get('/mycloset', (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).send('Not authenticated');
+  }
+  try {
+    res.render('pages/mycloset', { username: req.session.user.username });
+  } catch (err) {
+    console.error('My Closet error:', err);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
+
+
+
+
+
+
+
 
 // *****************************************************
 // <!-- Section 5 : Start Server-->
@@ -460,7 +459,7 @@ module.exports = { app, db };
 
 // Conditionally start the server if running the file directly
 if (require.main === module) {
-    app.listen(3000, () => {
-        console.log('Server is listening on port 3000');
-    });
+  app.listen(3000, () => {
+    console.log('Server is listening on port 3000');
+  });
 }
