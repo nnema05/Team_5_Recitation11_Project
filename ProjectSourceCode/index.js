@@ -88,13 +88,20 @@ app.get('/', (req, res) => {
   res.redirect('/login'); // Redirect to the /login route
 });
 
+// app.get('/login', (req, res) => {
+//   res.render('pages/login');
+// })
 app.get('/login', (req, res) => {
-  res.render('pages/login');
-})
+  res.render('pages/login', { layout: 'main', isLoginPage: true });
+});
 
 app.get('/register', (req, res) => {
-  res.render('pages/register');
-})
+  res.render('pages/register', { isRegisterPage: true });
+});
+
+// app.get('/register', (req, res) => {
+//   res.render('pages/register');
+// })
 
 app.get('/discover', (req, res) => {
   res.render('pages/discover');
@@ -246,7 +253,8 @@ app.post('/login', async (req, res) => {
     }
 
     // Redirect to /discover route after successful login
-    res.redirect('/discover');
+    //res.redirect('/discover');
+    res.redirect('/profile');
   } catch (error) {
     console.error('Login error:', error.message || error);
 
