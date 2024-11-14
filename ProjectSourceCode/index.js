@@ -88,13 +88,20 @@ app.get('/', (req, res) => {
   res.redirect('/login'); // Redirect to the /login route
 });
 
+// app.get('/login', (req, res) => {
+//   res.render('pages/login');
+// })
 app.get('/login', (req, res) => {
-  res.render('pages/login');
-})
+  res.render('pages/login', { layout: 'main', isLoginPage: true });
+});
 
 app.get('/register', (req, res) => {
-  res.render('pages/register');
-})
+  res.render('pages/register', { isRegisterPage: true });
+});
+
+// app.get('/register', (req, res) => {
+//   res.render('pages/register');
+// })
 
 app.get('/discover', (req, res) => {
   res.render('pages/discover');
@@ -106,31 +113,31 @@ app.get('/mycloset', (req, res) => {
 
 
 
-// FOR FOR YOU PAGE 
-app.get('/for-you', (req, res) => {
-  const personalizedContent = [
-    {
-      title: "Card 1",
-      description: "This is the first card.",
-      //imageUrl: 
-      url: "#"
-    },
-    {
-      title: "Card 2",
-      description: "This is the second card.",
-      //imageUrl: 
-      //url: "#"
-    },
-    {
-      title: "Card 3",
-      description: "This is the third card.",
-      //imageUrl: 
-      //url: "#"
-    }
-  ];
+// // FOR FOR YOU PAGE 
+// app.get('/for-you', (req, res) => {
+//   const personalizedContent = [
+//     {
+//       title: "Card 1",
+//       description: "This is the first card.",
+//       //imageUrl: 
+//       url: "#"
+//     },
+//     {
+//       title: "Card 2",
+//       description: "This is the second card.",
+//       //imageUrl: 
+//       //url: "#"
+//     },
+//     {
+//       title: "Card 3",
+//       description: "This is the third card.",
+//       //imageUrl: 
+//       //url: "#"
+//     }
+//   ];
 
-  res.render('forYouPage', { personalizedContent });
-});
+//   res.render('forYouPage', { personalizedContent });
+// });
 
 
 
@@ -212,6 +219,56 @@ app.post('/register', async (req, res) => {
 //   }
 // });
 
+// app.post('/login', async (req, res) => {
+//   try {
+//     // Find the user in the users table
+//     const user = await db.oneOrNone('SELECT * FROM users WHERE username = $1', [req.body.username]);
+
+//     // Check if the user exists
+//     if (!user) {
+//       const message = "Username not found. Please register.";
+//       if (req.headers['x-test-request']) {
+//         return res.status(401).json({ message });
+//       }
+//       return res.render('pages/login', { message, error: true });
+//     }
+
+//     // Compare the entered password with the hashed password in the database
+//     const match = await bcrypt.compare(req.body.password, user.password);
+
+//     if (!match) {
+//       const message = "Incorrect username or password.";
+//       if (req.headers['x-test-request']) {
+//         return res.status(401).json({ message });
+//       }
+//       return res.render('pages/login', { message, error: true });
+//     }
+
+//     // If the password is correct, save user details in session
+//     req.session.user = { username: user.username };
+//     req.session.save();
+
+//     if (req.headers['x-test-request']) {
+//       return res.status(200).json({ message: 'Login successful' });
+//     }
+
+//     // Redirect to /discover route after successful login
+//     //res.redirect('/discover');
+//     res.redirect('/profile');
+//   } catch (error) {
+//     console.error('Login error:', error.message || error);
+
+//     const message = "An error occurred during login. Please try again.";
+//     if (req.headers['x-test-request']) {
+//       return res.status(500).json({ message });
+//     }
+
+//     // Render login page with error message in normal operations
+//     res.render('pages/login', { message, error: true });
+//   }
+// });
+
+
 app.post('/login', async (req, res) => {
   try {
     // Find the user in the users table
@@ -223,7 +280,7 @@ app.post('/login', async (req, res) => {
       if (req.headers['x-test-request']) {
         return res.status(401).json({ message });
       }
-      return res.render('pages/login', { message, error: true });
+      return res.render('pages/login', { message, error: true, isLoginPage: true });
     }
 
     // Compare the entered password with the hashed password in the database
@@ -234,7 +291,7 @@ app.post('/login', async (req, res) => {
       if (req.headers['x-test-request']) {
         return res.status(401).json({ message });
       }
-      return res.render('pages/login', { message, error: true });
+      return res.render('pages/login', { message, error: true, isLoginPage: true });
     }
 
     // If the password is correct, save user details in session
@@ -246,7 +303,7 @@ app.post('/login', async (req, res) => {
     }
 
     // Redirect to /discover route after successful login
-    res.redirect('/discover');
+    res.redirect('/profile');
   } catch (error) {
     console.error('Login error:', error.message || error);
 
@@ -256,9 +313,10 @@ app.post('/login', async (req, res) => {
     }
 
     // Render login page with error message in normal operations
-    res.render('pages/login', { message, error: true });
+    res.render('pages/login', { message, error: true, isLoginPage: true });
   }
 });
+
 
 
 
@@ -326,7 +384,6 @@ app.get('/discover', async (req, res) => {
 
 // Logout route
 app.get('/logout', (req, res) => {
-
   req.session.destroy(err => {
     if (err) {
       // If there's an error during logout, you can log it and respond accordingly
@@ -334,7 +391,9 @@ app.get('/logout', (req, res) => {
       return res.status(500).send('Could not log out.');
     }
     // Render the logout page with a success message
-    res.render('pages/logout', {
+    res.render('pages/logout', { 
+      layout: 'main', 
+      isLogoutPage: true, 
       message: 'Logged out Successfully',
       error: false
     });
