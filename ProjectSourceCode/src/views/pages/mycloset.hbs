@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Closet</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <!-- ... existing head content ... -->
 </head>
 <body>
     <!-- Page Title -->
@@ -13,6 +10,16 @@
     <!-- Message partial to display errors or messages -->
     {{> message }}
 
-    
+    <!-- Image Upload Form -->
+    <form action="/upload" method="POST" enctype="multipart/form-data" class="text-center mt-4">
+        <div class="mb-3">
+            <label for="imageUpload" class="form-label">Upload an Image</label>
+            <input class="form-control" type="file" id="imageUpload" name="image" accept="image/*" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Upload</button>
+    </form>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
