@@ -96,7 +96,7 @@ app.get('/login', (req, res) => {
 });
 
 app.get('/register', (req, res) => {
-  res.render('pages/register', { isRegisterPage: true });
+  res.render('pages/register', { layout : 'main', isRegisterPage: true });
 });
 
 // app.get('/register', (req, res) => {
@@ -114,30 +114,30 @@ app.get('/mycloset', (req, res) => {
 
 
 // FOR FOR YOU PAGE 
-app.get('/for-you', (req, res) => {
-  const personalizedContent = [
-    {
-      title: "Card 1",
-      description: "This is the first card.",
-      //imageUrl: 
-      url: "#"
-    },
-    {
-      title: "Card 2",
-      description: "This is the second card.",
-      //imageUrl: 
-      //url: "#"
-    },
-    {
-      title: "Card 3",
-      description: "This is the third card.",
-      //imageUrl: 
-      //url: "#"
-    }
-  ];
+// app.get('/for-you', (req, res) => {
+//   const personalizedContent = [
+//     {
+//       title: "Card 1",
+//       description: "This is the first card.",
+//       //imageUrl: 
+//       url: "#"
+//     },
+//     {
+//       title: "Card 2",
+//       description: "This is the second card.",
+//       //imageUrl: 
+//       //url: "#"
+//     },
+//     {
+//       title: "Card 3",
+//       description: "This is the third card.",
+//       //imageUrl: 
+//       //url: "#"
+//     }
+//   ];
 
-  res.render('forYouPage', { personalizedContent });
-});
+//   res.render('forYouPage', { personalizedContent });
+// });
 
 
 
@@ -230,7 +230,7 @@ app.post('/login', async (req, res) => {
       if (req.headers['x-test-request']) {
         return res.status(401).json({ message });
       }
-      return res.render('pages/login', { message, error: true });
+      return res.render('pages/login', {isLoginPage :true,  message, error: true });
     }
 
     // Compare the entered password with the hashed password in the database
@@ -343,6 +343,7 @@ app.get('/logout', (req, res) => {
     }
     // Render the logout page with a success message
     res.render('pages/logout', {
+      isLogoutPage: true,
       message: 'Logged out Successfully',
       error: false
     });

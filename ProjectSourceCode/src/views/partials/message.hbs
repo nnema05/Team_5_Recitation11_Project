@@ -1,5 +1,46 @@
+<Style>
+.message {
+  background-color: #ffccff; /* Light pink background */
+  color: #ff66b2; /* Darker pink text */
+  border: 2px solid #ff99cc; /* Border in pink */
+  border-radius: 5px; /* Rounded corners */
+  padding: 10px 15px;
+  margin: 15px 0;
+  font-weight: bold;
+  font-size: 1rem;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Error styling */
+.message.error {
+  background-color: #ffccff; 
+  color: #ff66b2; 
+  border-color: #ff99cc;
+}
+
+/* Success or informational styling */
+.message.success {
+  background-color: #ffccff; /* Light blue background */
+  color: #ff66b2; /* Blue text */
+  border-color: #ff99cc; /* Subtle blue border */
+}
+
+</Style>
+
+
+
+
+
+{{#if message}}
+  <div class="message {{#if error}}error{{else}}success{{/if}}">
+    {{message}}
+  </div>
+{{/if}}
+
+{{!-- 
 {{#if message}}
   <div class="alert alert-{{#if error}}danger{{else}}success{{/if}}" role="alert">
     {{ message }}
   </div>
-{{/if}}
+{{/if}} --}}
