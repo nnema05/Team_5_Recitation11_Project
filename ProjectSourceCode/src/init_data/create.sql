@@ -3,3 +3,11 @@ CREATE TABLE IF NOT EXISTS users (
     password CHAR(60) NOT NULL,
     info TEXT
 );
+
+-- creates database of outfits!!
+CREATE TABLE IF NOT EXISTS outfits (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50),
+    tags TEXT,
+    image TEXT
+);

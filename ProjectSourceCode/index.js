@@ -281,7 +281,8 @@ const auth = (req, res, next) => {
     } else {
       // For regular web requests, redirect to login page
       // return res.redirect('/login');
-      res.should.redirectTo(/^.*127\.0\.0\.1.*\/login$/);
+      // res.should.redirectTo(/^.*127\.0\.0\.1.*\/login$/);
+      res.should.redirectTo('/login');
     }
   }
   next();
