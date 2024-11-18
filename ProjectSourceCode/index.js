@@ -111,6 +111,10 @@ app.get('/mycloset', (req, res) => {
   res.render('pages/mycloset');
 })
 
+app.get('/reset-password', (req, res) => {
+  res.render('pages/reset-password');
+});
+
 
 
 // FOR FOR YOU PAGE 
