@@ -4,3 +4,13 @@ Monday 11/4 Meeting #2
 - Our docker wasn't working completely during the meeting, however we were able to demo our code and get our docker working later. 
 - Our plan for next week is to finish up the html files, and start working on functionalities of our project. 
 
+Sunday 11/10
+- Talked about we wanted to API post request to 
+- If that didn't work, we talked about a possible back up database
+
+Sunday 11/17
+- Talked about the backup database system
+- Talked about plan for next week 
+- To do list: 
+- Finish connecting the database images to the application
+- Then making sure the uploads display on my closet page as its own section
