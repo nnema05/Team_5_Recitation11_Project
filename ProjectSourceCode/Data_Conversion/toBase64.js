@@ -58,13 +58,23 @@ image_array = [
         tag: 'green',
         filename: 'img/image5.jpeg'
     },
+    {
+        name: 'Shoes',
+        tag: 'brown',
+        filename: 'img/image6.jpeg'
+    },
+    {
+        name: 'Shirt',
+        tag: 'brown',
+        filename: 'img/image7.jpeg'
+    },
 ]
 
 // make insert into file that will go into insert.sql!!!
 let inserts = "";
 for(let i = 0; i < image_array.length; i++) {
     const base64String = fileToBase64(image_array[i].filename);
-    content = `INSERT INTO OUTFITS(NAME, TAGS, IMAGE) VALUES('${image_array[i].name}', '${image_array[i].tag}', "data:image/png;base64,${base64String}')'`;
+    content = `INSERT INTO OUTFITS(NAME, TAGS, IMAGE) VALUES('${image_array[i].name}', '${image_array[i].tag}', 'data:image/png;base64,${base64String}');`;
     inserts += content + '\n';
     
 }
