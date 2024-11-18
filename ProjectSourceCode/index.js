@@ -3,6 +3,8 @@
 // *****************************************************
 
 const express = require('express'); // To build an application server or API
+const multer = require('multer'); // For handling file uploads
+const fs = require('fs'); // For file system operations
 const app = express();
 const handlebars = require('express-handlebars');
 const Handlebars = require('handlebars');
@@ -12,7 +14,26 @@ const bodyParser = require('body-parser');
 const session = require('express-session'); // To set the session object. To store or access session data, use the `req.session`, which is (generally) serialized as JSON by the store.
 const bcrypt = require('bcryptjs'); //  To hash passwords
 const axios = require('axios'); // To make HTTP requests from our server. We'll learn more about it in Part C.
+
 app.use(express.static('public'));
+
+// Ensure the uploads directory exists
+const uploadDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+    console.log('Created uploads directory');
+}
+
+// Configure multer for file storage
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, uploadDir);
+    },
+    filename: (req, file, cb) => {
+        cb(null, `${Date.now()}-${file.originalname}`);
+    },
+});
+const upload = multer({ storage });
 
 // *****************************************************
 // <!-- Section 2 : Connect to DB -->
@@ -286,7 +307,7 @@ const auth = (req, res, next) => {
       // For regular web requests, redirect to login page
       // return res.redirect('/login');
       // res.should.redirectTo(/^.*127\.0\.0\.1.*\/login$/);
-      res.should.redirectTo('/login');
+      return res.redirect('/login');
     }
   }
   next();
@@ -307,6 +328,8 @@ app.get('/test', (req, res) => {
 // Authentication Required
 app.use(auth);
 app.use('/discover', auth);
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 
 // Discover page
 app.get('/discover', async (req, res) => {
@@ -438,25 +461,46 @@ app.get('/profile', (req, res) => {
 //   }
 // });
 
-app.get('/mycloset', (req, res) => {
+app.get('/mycloset', async (req, res) => {
   if (!req.session.user) {
-    return res.status(401).send('Not authenticated');
+      return res.status(401).send('Not authenticated');
   }
+
   try {
-    res.render('pages/mycloset', { username: req.session.user.username });
+      // Fetch all images from the outfits table
+      const images = await db.any('SELECT name, tags, image FROM outfits');
+
+      // Render the template with the fetched images
+      res.render('pages/mycloset', { username: req.session.user.username, images });
   } catch (err) {
-    console.error('My Closet error:', err);
-    res.status(500).send('Internal Server Error');
+      console.error('Error fetching images from database:', err);
+      res.status(500).send('Failed to load images.');
   }
 });
 
 
+app.post('/upload', upload.single('image'), async (req, res) => {
+  if (!req.file) {
+      return res.status(400).send('No file uploaded.');
+  }
 
+  try {
+      // Save file information in the database
+      await db.none(
+          'INSERT INTO outfits(name, tags, image) VALUES($1, $2, $3)',
+          [
+              req.body.name || 'Uploaded Image', // Default name if not provided
+              req.body.tags || '',              // Optional tags
+              req.file.filename,                // Save the filename
+          ]
+      );
 
-
-
-
-
+      res.redirect('/mycloset'); // Redirect to My Closet page
+  } catch (err) {
+      console.error('Error saving file to database:', err);
+      res.status(500).send('Error saving file to database.');
+  }
+});
 
 
 // *****************************************************
