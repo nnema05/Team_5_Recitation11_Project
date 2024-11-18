@@ -461,6 +461,8 @@ app.get('/profile', (req, res) => {
 //   }
 // });
 
+app.use('/upload', express.static(path.join(__dirname, 'upload')));
+
 app.get('/mycloset', async (req, res) => {
   if (!req.session.user) {
       return res.status(401).send('Not authenticated');
@@ -470,13 +472,38 @@ app.get('/mycloset', async (req, res) => {
       // Fetch all images from the outfits table
       const images = await db.any('SELECT name, tags, image FROM outfits');
 
+      // Prepend the /uploads/ path to the image filenames for proper URL resolution
+      const formattedImages = images.map(image => ({
+          ...image,
+          imagePath: `/uploads/${image.image}`  // Prepend path to filename
+      }));
+
       // Render the template with the fetched images
-      res.render('pages/mycloset', { username: req.session.user.username, images });
+      res.render('pages/mycloset', { username: req.session.user.username, images: formattedImages });
   } catch (err) {
       console.error('Error fetching images from database:', err);
       res.status(500).send('Failed to load images.');
   }
 });
+
+
+
+// app.get('/mycloset', async (req, res) => {
+//   if (!req.session.user) {
+//       return res.status(401).send('Not authenticated');
+//   }
+
+//   try {
+//       // Fetch all images from the outfits table
+//       const images = await db.any('SELECT name, tags, image FROM outfits');
+
+//       // Render the template with the fetched images
+//       res.render('pages/mycloset', { username: req.session.user.username, images });
+//   } catch (err) {
+//       console.error('Error fetching images from database:', err);
+//       res.status(500).send('Failed to load images.');
+//   }
+// });
 
 
 app.post('/upload', upload.single('image'), async (req, res) => {

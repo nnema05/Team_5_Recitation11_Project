@@ -1,11 +1,83 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Closet</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
 </head>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #ffe6f0;
+      margin: 0;
+      padding: 0;
+    }
+    .navbar {
+      background-color: #ff99cc;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .navbar-toggler-icon {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255,102,178,1)' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+    }
+    .nav-link {
+      color: white !important;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+    .nav-link:hover {
+      color: #ffccff !important;
+    }
+    .border-bottom {
+      border-bottom: 3px solid #ff66b2 !important;
+    }
+      .profile-container {
+      max-width: 500px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #ff99cc;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+    .title {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+    .card-stack {
+      display: grid;
+      text-align: center;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      
+    }
+    .content-card {
+      width: 100%;
+      background-color: #ffe6f0;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      padding: 20px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px 0;
+    color: #ffffff;
+    background-color: #ff00c3; /* Bright pink button */
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 16px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+  }
+  .btn:hover {
+    background-color: #de0fa7; /* Slightly darker pink on hover */
+  }
+    .btn-swipe {
+      margin: 10px;
+    }
+
+  
+
+  </style>
 <body>
     <!-- Page Title -->
     <h1 class="text-center mt-4">My Closet</h1>
@@ -50,6 +122,5 @@
 {{/if}}
 
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
