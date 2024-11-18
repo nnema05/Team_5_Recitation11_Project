@@ -79,48 +79,42 @@
 
   </style>
 <body>
-    <!-- Page Title -->
-    <h1 class="text-center mt-4">My Closet</h1>
+  <h1 class="text-center mt-4">My Closet</h1>
 
-    <!-- Message partial to display errors or messages -->
-    {{> message }}
+  {{> message }}
 
-    <!-- Image Upload Form -->
-    <form action="/upload" method="POST" enctype="multipart/form-data" class="text-center mt-4">
-        <div class="mb-3">
-            <label for="imageUpload" class="form-label">Upload an Image</label>
-            <input class="form-control" type="file" id="imageUpload" name="image" accept="image/*" required>
-        </div>
-        <div class="mb-3">
-            <label for="imageName" class="form-label">Image Name</label>
-            <input class="form-control" type="text" id="imageName" name="name" placeholder="Image Name">
-        </div>
-        <div class="mb-3">
-            <label for="tags" class="form-label">Tags (comma-separated)</label>
-            <input class="form-control" type="text" id="tags" name="tags" placeholder="e.g., green, skirt">
-        </div>
-        <button type="submit" class="btn btn-primary">Upload</button>
-    </form>
+  <form action="/upload" method="POST" enctype="multipart/form-data" class="text-center mt-4">
+    <div class="mb-3">
+      <label for="imageUpload" class="form-label">Upload an Image</label>
+      <input class="form-control" type="file" id="imageUpload" name="image" accept="image/*" required>
+    </div>
+    <div class="mb-3">
+      <label for="imageName" class="form-label">Image Name</label>
+      <input class="form-control" type="text" id="imageName" name="name" placeholder="Image Name">
+    </div>
+    <div class="mb-3">
+      <label for="tags" class="form-label">Tags (comma-separated)</label>
+      <input class="form-control" type="text" id="tags" name="tags" placeholder="e.g., green, skirt">
+    </div>
+    <button type="submit" class="btn btn-primary">Upload</button>
+  </form>
 
-    <!-- Display images from the database -->
-{{#if images.length}}
-<div class="row">
+  {{#if images.length }}
+  <div class="row">
     {{#each images}}
     <div class="col-md-4">
-        <div class="card mb-4">
-            <img src="/uploads/{{this.image}}" class="card-img-top" alt="{{this.name}}">
-            <div class="card-body">
-                <h5 class="card-title">{{this.name}}</h5>
-                <p class="card-text">{{this.tags}}</p>
-            </div>
+      <div class="card mb-4">
+        <img src="/uploads/{{this.image}}" class="card-img-top" alt="{{this.name}}">
+        <div class="card-body">
+          <h5 class="card-title">{{this.name}}</h5>
+          <p class="card-text">{{this.tags}}</p>
         </div>
+      </div>
     </div>
     {{/each}}
-</div>
-{{else}}
-<p class="text-center">No items in your closet yet.</p>
-{{/if}}
-
-
+  </div>
+  {{else}}
+  <p class="text-center">No items in your closet yet.</p>
+  {{/if}}
 </body>
 </html>

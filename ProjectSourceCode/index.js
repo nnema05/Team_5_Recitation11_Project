@@ -24,6 +24,7 @@ if (!fs.existsSync(uploadDir)) {
     console.log('Created uploads directory');
 }
 
+
 // Configure multer for file storage
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -469,22 +470,42 @@ app.get('/mycloset', async (req, res) => {
   }
 
   try {
-      // Fetch all images from the outfits table
+      // Fetch all images from the database
       const images = await db.any('SELECT name, tags, image FROM outfits');
 
-      // Prepend the /uploads/ path to the image filenames for proper URL resolution
-      const formattedImages = images.map(image => ({
-          ...image,
-          imagePath: `/uploads/${image.image}`  // Prepend path to filename
-      }));
-
-      // Render the template with the fetched images
-      res.render('pages/mycloset', { username: req.session.user.username, images: formattedImages });
-  } catch (err) {
-      console.error('Error fetching images from database:', err);
-      res.status(500).send('Failed to load images.');
+      // Render the mycloset page with the fetched images
+      res.render('pages/mycloset', { images });
+  } catch (error) {
+      console.error('Error fetching images:', error.message);
+      res.status(500).send('Error fetching images.');
   }
 });
+
+
+
+// app.get('/mycloset', async (req, res) => {
+//   if (!req.session.user) {
+//       return res.status(401).send('Not authenticated');
+//   }
+
+//   try {
+//       // Fetch all images from the outfits table
+//       const images = await db.any('SELECT name, tags, image FROM outfits');
+
+//       // Prepend the /uploads/ path to the image filenames for proper URL resolution
+//       const formattedImages = images.map(image => ({
+//           ...image,
+//           imagePath: `/uploads/${image.image}`  // Prepend path to filename
+//       }));
+//       console.log(images); 
+
+//       // Render the template with the fetched images
+//       res.render('pages/mycloset', { username: req.session.user.username, images: formattedImages });
+//   } catch (err) {
+//       console.error('Error fetching images from database:', err);
+//       res.status(500).send('Failed to load images.');
+//   }
+// });
 
 
 
@@ -506,28 +527,37 @@ app.get('/mycloset', async (req, res) => {
 // });
 
 
+
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+
+
+
+
 app.post('/upload', upload.single('image'), async (req, res) => {
   if (!req.file) {
-      return res.status(400).send('No file uploaded.');
+    return res.status(400).send('No file uploaded.');
   }
 
   try {
-      // Save file information in the database
-      await db.none(
-          'INSERT INTO outfits(name, tags, image) VALUES($1, $2, $3)',
-          [
-              req.body.name || 'Uploaded Image', // Default name if not provided
-              req.body.tags || '',              // Optional tags
-              req.file.filename,                // Save the filename
-          ]
-      );
+    // Save file information in the database
+    await db.none(
+      'INSERT INTO outfits(name, tags, image) VALUES($1, $2, $3)',
+      [
+        req.body.name || 'Uploaded Image',  // Default name if not provided
+        req.body.tags || '',                // Optional tags
+        req.file.filename                   // Image filename saved in uploads/
+      ]
+    );
 
-      res.redirect('/mycloset'); // Redirect to My Closet page
+    res.redirect('/mycloset');  // Redirect to the "My Closet" page after uploading
   } catch (err) {
-      console.error('Error saving file to database:', err);
-      res.status(500).send('Error saving file to database.');
+    console.error('Error saving file to database:', err);
+    res.status(500).send('Error saving file to database.');
   }
 });
+
 
 
 // *****************************************************
