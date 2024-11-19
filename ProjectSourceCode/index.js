@@ -629,6 +629,7 @@ const router = express.Router();
 // Configure the database connection
 const pool = new Pool({
   user: 'username',
+  host: 'localhost',
   database: 'myclothes',
   password: 'password',
   port: 5432, // Default PostgreSQL port
@@ -644,18 +645,14 @@ router.get('/myclothes', async (req, res) => {
 
   try {
     // Fetch clothing items for the logged-in user
-    const result = await pool.query(
-      'SELECT name, tags, image FROM myclothes WHERE user_id = $1',
-      [userId]
-    );
-
+    const result = await pool.query('SELECT * FROM myclothes');
     const clothes = result.rows; // Array of clothing items
-    clothes.forEach((item, index) => {
-      console.log(`Clothing Item ${index + 1}:`);
-      console.log(`  Name: ${item.name}`);
-      console.log(`  Tags: ${item.tags}`);
-      console.log(`  Image: ${item.image}`);
-    });
+    // clothes.forEach((item, index) => {
+    //   console.log(`Clothing Item ${index + 1}:`);
+    //   console.log(`  Name: ${item.name}`);
+    //   console.log(`  Tags: ${item.tags}`);
+    //   console.log(`  Image: ${item.image}`);
+    // });
 
     //console.log('Fetched clothes:', clothes); // Debugging
 
