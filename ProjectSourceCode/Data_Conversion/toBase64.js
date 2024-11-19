@@ -68,6 +68,152 @@ image_array = [
         tag: 'brown',
         filename: 'img/image7.jpeg'
     },
+    {
+        name: 'Cardigan',
+        tag: 'tan',
+        filename: 'img/image8.jpeg'
+    },
+    {
+        name: 'Sweater',
+        tag: 'multicolor',
+        filename: 'img/image9.jpeg'
+    },
+    {
+        name: 'Shirt',
+        tag: 'red',
+        filename: 'img/image10.jpeg'
+    },
+    {
+        name: 'Overalls',
+        tag: 'blue',
+        filename: 'img/image11.jpeg'
+    },
+    {
+        name: 'Shirt',
+        tag: 'tan',
+        filename: 'img/image12.jpeg'
+    },
+    {
+        name: 'Sweatshirt',
+        tag: 'gray',
+        filename: 'img/image13.jpeg'
+    },
+    {
+        name: 'Cardigan',
+        tag: 'blue',
+        filename: 'img/image14.jpeg'
+    },
+    {
+        name: 'Sweater',
+        tag: 'white',
+        filename: 'img/image15.jpeg'
+    },
+    {
+        name: 'Sweater',
+        tag: 'multicolor',
+        filename: 'img/image16.jpeg'
+    },
+    {
+        name: 'Dress',
+        tag: 'green',
+        filename: 'img/image17.jpeg'
+    },
+    {
+        name: 'Vest',
+        tag: 'blue',
+        filename: 'img/image18.jpeg'
+    },
+    {
+        name: 'Sweater',
+        tag: 'green',
+        filename: 'img/image12.jpeg'
+    },
+    {
+        name: 'Shirt',
+        tag: 'black',
+        filename: 'img/image19.jpeg'
+    },
+    {
+        name: 'Shirt',
+        tag: 'black',
+        filename: 'img/image20.jpeg'
+    },
+    {
+        name: 'Pants',
+        tag: 'purple',
+        filename: 'img/image21.jpeg'
+    },
+    {
+        name: 'Dress',
+        tag: 'green',
+        filename: 'img/image22.jpeg'
+    },
+    {
+        name: 'Jacket',
+        tag: 'brown',
+        filename: 'img/image23.jpeg'
+    },
+    {
+        name: 'Shirt',
+        tag: 'green',
+        filename: 'img/image24.jpeg'
+    },
+    {
+        name: 'Overalls',
+        tag: 'blue',
+        filename: 'img/image25.jpeg'
+    },
+    {
+        name: 'Vest',
+        tag: 'multicolor',
+        filename: 'img/image26.jpeg'
+    },
+    {
+        name: 'Jacket',
+        tag: 'blue',
+        filename: 'img/image27.jpeg'
+    },
+    {
+        name: 'Dress',
+        tag: 'blue',
+        filename: 'img/image28.jpeg'
+    },
+    {
+        name: 'Vest',
+        tag: 'tan',
+        filename: 'img/image29.jpeg'
+    },
+    {
+        name: 'Shirt',
+        tag: 'white',
+        filename: 'img/image30.jpeg'
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
 ]
 
 // make insert into file that will go into insert.sql!!!
