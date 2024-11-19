@@ -1,9 +1,23 @@
+TA Monday 11/18 Meeting #4
+- This week we worked on creating a database for our images (api rquest does not work) and allowing users to upload things to a closet page
+- Our plan for the next week is to make sure all images can display on the website and build a webscraper
+
+TA Monday 11/11 Meeting #3
+- This week we worked on creating a discover page, unit testing and styling for all our work 
+- Our plan for the next week is to start the post rquest to Pinterest
+
 Monday 11/4 Meeting #2
 - This week we worked on the login page, registration page, discover page, header, footer and my closet. 
 - We were able to make a basic outline for all of these pages, and start linking them together. 
 - Our docker wasn't working completely during the meeting, however we were able to demo our code and get our docker working later. 
 - Our plan for next week is to finish up the html files, and start working on functionalities of our project. 
 
+TA Monday 11/4 Meeting #1
+- This week we worked on creating our idea and a wireframe for the idea
+- We talked about how to figure out how to divide up the tasks in the project with our TA
+- Our plan for next week is to divide up the work and start working on the html layout and front-end of our work
+
+TEAM MEETINGS
 Sunday 11/10
 - Talked about we wanted to API post request to 
 - If that didn't work, we talked about a possible back up database
