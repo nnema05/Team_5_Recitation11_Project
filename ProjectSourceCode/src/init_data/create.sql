@@ -1,7 +1,8 @@
 CREATE TABLE IF NOT EXISTS users (
     username VARCHAR(50) PRIMARY KEY,
     password CHAR(60) NOT NULL,
-    info TEXT
+    info TEXT,
+    -- myclothes TEXT[] 
 );
 
 -- creates database of outfits!!
@@ -10,4 +11,12 @@ CREATE TABLE IF NOT EXISTS outfits (
     name VARCHAR(50),
     tags TEXT,
     image TEXT
+);
+
+CREATE TABLE IF NOT EXISTS myclothes (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50),
+    tags TEXT,
+    image TEXT
+    user_id VARCHAR(50) REFERENCES users(username)
 );

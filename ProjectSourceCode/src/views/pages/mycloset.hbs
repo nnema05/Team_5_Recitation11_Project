@@ -99,7 +99,30 @@
     <button type="submit" class="btn btn-primary">Upload</button>
   </form>
 
-  {{#if images.length }}
+
+
+
+  <div class="profile-container">
+    <h2 class="title">Your Clothing Items</h2>
+
+   {{#if clothes.length}}
+      {{#each clothes}}
+        <div class="clothing-item">
+          <img src="{{this.image}}" alt="Clothing Image" class="clothing-image">
+          <div class="clothing-name">{{this.name}}</div>
+          <div class="clothing-tags">{{this.tags}}</div>
+        </div>
+      {{/each}}
+  {{else}}
+    <p class="text-center">No clothing items found in your closet. Start uploading!</p>
+  {{/if}}
+  </div>
+
+
+  </body>
+</html>
+
+  {{!-- {{#if images.length }}
   <div class="row">
     {{#each images}}
     <div class="col-md-4">
@@ -115,6 +138,4 @@
   </div>
   {{else}}
   <p class="text-center">No items in your closet yet.</p>
-  {{/if}}
-</body>
-</html>
+  {{/if}} --}}
