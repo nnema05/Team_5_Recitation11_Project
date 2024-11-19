@@ -148,9 +148,26 @@ app.get('/register', (req, res) => {
 //   res.render('pages/register');
 // })
 
-app.get('/discover', (req, res) => {
-  res.render('pages/discover');
-})
+app.get('/discover', async (req, res) => {
+  try {
+    // Query the outfits table to retrieve all outfits
+    const outfits = await db.any('SELECT name, tags, image FROM outfits');
+
+    // Map the results to the format needed for rendering
+    const events = outfits.map(outfit => ({
+      name: outfit.name,
+      image: outfit.image, // The Base64 string for the image
+      tag: outfit.tags,    // Tags for the outfit
+    }));
+
+    // Render the discover page with the data
+    res.render('pages/discover', { events });
+  } catch (error) {
+    console.error('Error fetching outfits from database:', error);
+    res.render('pages/discover', { events: [], message: 'Failed to load outfits.' });
+  }
+});
+
 
 app.get('/mycloset', (req, res) => {
   res.render('pages/mycloset');
@@ -581,7 +598,10 @@ app.post('/upload', upload.single('image'), (req, res) => {
   const base64Image = fileToBase64(imageFile.path);
 
   // Create SQL insert statement
-  const sqlInsert = `INSERT INTO myclothes (name, tags, image) VALUES ('${name}', '${tags}', 'data:image/png;base64,${base64Image}');`;
+  const sqlInsert = `
+INSERT INTO myclothes (name, tags, image)
+VALUES ('${name}', '${tags}', 'data:image/png;base64,${base64Image}');
+`;
 
   // Append the insert statement to a file
   fs.appendFile('insertClothes.sql', sqlInsert, (err) => {
