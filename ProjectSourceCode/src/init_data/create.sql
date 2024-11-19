@@ -14,9 +14,10 @@ CREATE TABLE IF NOT EXISTS outfits (
 );
 
 CREATE TABLE IF NOT EXISTS myclothes (
+    username VARCHAR(50) REFERENCES users(username)
     id SERIAL PRIMARY KEY,
     name VARCHAR(50),
     tags TEXT,
     image TEXT,
-    user_id VARCHAR(50) REFERENCES users(username)
+    
 );
