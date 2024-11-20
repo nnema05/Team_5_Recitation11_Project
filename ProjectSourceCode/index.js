@@ -148,25 +148,54 @@ app.get('/register', (req, res) => {
 //   res.render('pages/register');
 // })
 
+// app.get('/discover', async (req, res) => {
+//   try {
+//     // Query the outfits table to retrieve all outfits
+//     const outfits = await db.any('SELECT name, tags, image FROM outfits');
+
+//     // Map the results to the format needed for rendering
+//     const events = outfits.map(outfit => ({
+//       name: outfit.name,
+//       image: outfit.image, // The Base64 string for the image
+//       tag: outfit.tags,    // Tags for the outfit
+//     }));
+
+//     // Render the discover page with the data
+//     res.render('pages/discover', { events });
+//   } catch (error) {
+//     console.error('Error fetching outfits from database:', error);
+//     res.render('pages/discover', { events: [], message: 'Failed to load outfits.' });
+//   }
+// });
+
 app.get('/discover', async (req, res) => {
   try {
-    // Query the outfits table to retrieve all outfits
-    const outfits = await db.any('SELECT name, tags, image FROM outfits');
-
-    // Map the results to the format needed for rendering
-    const events = outfits.map(outfit => ({
-      name: outfit.name,
-      image: outfit.image, // The Base64 string for the image
-      tag: outfit.tags,    // Tags for the outfit
-    }));
-
-    // Render the discover page with the data
-    res.render('pages/discover', { events });
+    // Fetch the first outfit by default
+    const outfit = await db.oneOrNone('SELECT id, name, tags, image FROM outfits WHERE id = $1', [1]); // Start with id=1
+    res.render('pages/discover', { outfit });
   } catch (error) {
-    console.error('Error fetching outfits from database:', error);
-    res.render('pages/discover', { events: [], message: 'Failed to load outfits.' });
+    console.error('Error fetching outfit from database:', error);
+    res.render('pages/discover', { outfit: null, message: 'Failed to load outfit.' });
   }
 });
+
+// API endpoint to fetch the next outfit based on the current ID
+app.get('/discover/next/:id', async (req, res) => {
+  const currentId = parseInt(req.params.id, 10);
+  try {
+    const outfit = await db.oneOrNone('SELECT id, name, tags, image FROM outfits WHERE id > $1 ORDER BY id ASC LIMIT 1', [currentId]);
+
+    if (outfit) {
+      res.json({ success: true, outfit });
+    } else {
+      res.json({ success: false, message: 'No more outfits.' });
+    }
+  } catch (error) {
+    console.error('Error fetching the next outfit:', error);
+    res.status(500).json({ success: false, message: 'Failed to load next outfit.' });
+  }
+});
+
 
 
 app.get('/mycloset', (req, res) => {
