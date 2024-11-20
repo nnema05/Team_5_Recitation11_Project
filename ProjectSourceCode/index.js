@@ -659,6 +659,21 @@ app.post('/upload', upload.single('image'), async (req, res) => {
     res.status(500).send('Failed to save clothing data.');
   }
 });
+
+const getRightSwipedClothes = async (username) => {
+  try {
+    // Fetch right-swiped clothes from the database
+    const result = await db.any(
+      `SELECT unnest(myclothes) AS clothing_item FROM users WHERE username = $1`,
+      [username]
+    );
+    return result.map(item => ({ name: item.clothing_item }));
+  } catch (error) {
+    console.error('Error fetching right-swiped clothes:', error);
+    throw error;
+  }
+};
+
 app.get('/mycloset', async (req, res) => {
   const userid = req.session.user.username; 
   try {
@@ -671,7 +686,29 @@ app.get('/mycloset', async (req, res) => {
     console.error('Database query error:', err.message, err.stack);
     res.render('pages/mycloset', { error: 'Failed to retrieve clothing data. Please try again later.' });
   }
-});
+
+  // try {
+  //   // Fetch the user's `myclothes` array from the database
+  //   const userResult = await db.one(`SELECT myclothes FROM users WHERE username = '${userid}'`);
+  //   const myclothes = userResult.myclothes || []; // Default to an empty array if null
+
+  //   // Fetch the user's right-swiped clothes (assuming another helper or query exists)
+  //   const rightSwipedClothes = await getRightSwipedClothes(userid);
+
+  //   // Render the mycloset page with the clothing data
+  //   res.render('pages/mycloset', { myclothes, rightSwipedClothes });
+  // } catch (err) {
+  //   console.error('Error loading closet:', err.message);
+
+  //   // Render an error message if headers haven't been sent yet
+  //   if (!res.headersSent) {
+  //     res.render('pages/mycloset', { error: 'Failed to retrieve your closet data. Please try again later.' });
+  //   }
+  // }
+  
+  });
+  
+
 
 // app.post('/upload', upload.single('image'), async (req, res) => {
 //   const { name, tags } = req.body;

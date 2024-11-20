@@ -74,14 +74,13 @@
       margin: 10px;
     }
 
-    /* Added CSS to handle image sizing */
+    
     .clothing-image {
-      max-width: 200px;  /* Limit image width */
-      max-height: 200px; /* Limit image height */
-      width: auto;       /* Maintain aspect ratio */
-      height: auto;      /* Maintain aspect ratio */
+      max-width: 200px;  
+      max-height: 200px; 
+      width: auto;       
+      height: auto;      
     }
-
   </style>
 </head>
 <body>
@@ -124,8 +123,24 @@
     {{/if}}
   </div>
 
+  <div class="profile-container">
+  <h2 class="title">Right Swiped Clothes</h2>
+  {{#if rightSwipedClothes.length}}
+    {{#each rightSwipedClothes}}
+      <div class="clothing-item">
+        <img src="{{this.image}}" alt="Right Swiped Clothing Image" class="clothing-image">
+        <div class="clothing-name">{{this.name}}</div>
+        <div class="clothing-tags">{{this.tags}}</div>
+      </div>
+    {{/each}}
+  {{else}}
+    <p class="text-center">No right-swiped clothing items found.</p>
+  {{/if}}
+</div>
+  </div>
 </body>
 </html>
+
 
 
   {{!-- {{#if images.length }}
