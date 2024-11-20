@@ -1,7 +1,6 @@
 INSERT INTO OUTFITS(NAME, TAGS, IMAGE) VALUES('Skirt', 'green', 'img/image1.jpeg');
 INSERT INTO OUTFITS(NAME, TAGS, IMAGE) VALUES('Shirt', 'blue', 'img/image2.jpeg');
 INSERT INTO OUTFITS(NAME, TAGS, IMAGE) VALUES('Dress', 'blue', 'img/image3.jpeg');
-INSERT INTO OUTFITS(NAME, TAGS, IMAGE) VALUES('Dress', 'blue', 'img/image4.jpeg');
 INSERT INTO OUTFITS(NAME, TAGS, IMAGE) VALUES('Skirt', 'green', 'img/image5.jpeg');
 INSERT INTO OUTFITS(NAME, TAGS, IMAGE) VALUES('Shoes', 'brown', 'img/image6.jpeg');
 INSERT INTO OUTFITS(NAME, TAGS, IMAGE) VALUES('Shirt', 'brown', 'img/image7.jpeg');

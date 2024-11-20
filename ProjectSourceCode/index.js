@@ -256,9 +256,10 @@ app.post('/save-clothes', async (req, res) => {
        WHERE username = $2`,
       [outfit.image, username]
     );
-
+    console.log("outfit saved!");
     res.json({ success: true, message: 'Outfit saved!' });
   } catch (error) {
+    console.log("does not save");
     console.error(error);
     res.status(500).json({ success: false, message: 'Database error' });
   }

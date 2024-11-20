@@ -48,11 +48,11 @@ image_array = [
         tag: 'blue',
         filename: 'img/image3.jpeg'
     },
-    {
-        name: 'Dress',
-        tag: 'blue',
-        filename: 'img/image4.jpeg'
-    },
+    // {
+    //     name: 'Dress',
+    //     tag: 'blue',
+    //     filename: 'img/image4.jpeg'
+    // },
     {
         name: 'Skirt',
         tag: 'green',
