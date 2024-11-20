@@ -188,52 +188,41 @@ image_array = [
         tag: 'white',
         filename: 'img/image30.jpeg'
     },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
 ]
 
-// make insert into file that will go into insert.sql!!!
-let inserts = "";
-for(let i = 0; i < image_array.length; i++) {
-    const base64String = fileToBase64(image_array[i].filename);
-    content = `INSERT INTO OUTFITS(NAME, TAGS, IMAGE) VALUES('${image_array[i].name}', '${image_array[i].tag}', 'data:image/png;base64,${base64String}');`;
-    inserts += content + '\n';
+// // make insert into file that will go into insert.sql!!!
+// let inserts = "";
+// for(let i = 0; i < image_array.length; i++) {
+//     const base64String = fileToBase64(image_array[i].filename);
+//     content = `INSERT INTO OUTFITS(NAME, TAGS, IMAGE) VALUES('${image_array[i].name}', '${image_array[i].tag}', 'data:image/png;base64,${base64String}');`;
+//     inserts += content + '\n';
     
+// }
+
+// // write all inserts into output.sql!!!
+// fs.writeFile('output.sql', inserts, (err) => {
+//     if (err) {
+//       console.error(err);
+//       return;
+//     }
+//     console.log('File has been written successfully.');
+//   });
+
+let inserts = '';
+for (let i = 0; i < image_array.length; i++) {
+    // Use the filename directly instead of converting to Base64
+    content = `INSERT INTO OUTFITS(NAME, TAGS, IMAGE) VALUES('${image_array[i].name}', '${image_array[i].tag}', '${image_array[i].filename}');`;
+    inserts += content + '\n';
 }
 
-// write all inserts into output.sql!!!
+// Write all insert statements to output.sql
 fs.writeFile('output.sql', inserts, (err) => {
     if (err) {
-      console.error(err);
-      return;
+        console.error(err);
+        return;
     }
     console.log('File has been written successfully.');
-  });
-
+});p
 
 
 

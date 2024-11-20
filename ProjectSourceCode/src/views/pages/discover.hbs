@@ -91,7 +91,8 @@
     </div>
   </div> --}}
 
-<div class="profile-container">
+{{!- WITH BASE 64}}
+{{!-- <div class="profile-container">
   <h1 class="title">Discover</h1>
   <div class="card-stack" id="cardStack">
   <div class="content-card" id="outfitCard">
@@ -99,6 +100,21 @@
     <h2 id="outfitName">{{outfit.name}}</h2>
     <p id="outfitTags">{{outfit.tags}}</p>
   </div>
+  </div>
+
+  <div class="text-center mt-5">
+    <button class="btn btn-danger btn-swipe" id="swipeLeft">Swipe Left</button>
+    <button class="btn btn-success btn-swipe" id="swipeRight">Swipe Right</button>
+  </div>
+</div> --}}
+<div class="profile-container">
+  <h1 class="title">Discover</h1>
+  <div class="card-stack" id="cardStack">
+    <div class="content-card" id="outfitCard">
+      <img id="outfitImage" src={{outfit.image}} alt="Outfit Image">
+      <h2 id="outfitName">{{outfit.name}}</h2>
+      <p id="outfitTags">{{outfit.tags}}</p>
+    </div>
   </div>
 
   <div class="text-center mt-5">
@@ -137,6 +153,42 @@
   document.getElementById('swipeLeft').addEventListener('click', fetchNextOutfit);
   document.getElementById('swipeRight').addEventListener('click', fetchNextOutfit);
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+  const swipeRightButton = document.getElementById('swipeRight');
+
+  const saveOutfit = (outfit) => {
+    fetch('/save-clothes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        username: 'currentUsername', // Replace with the actual username
+        outfit: {
+          image: outfit.image, // Base64 string of the image
+        }
+      }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        console.log('Outfit saved!');
+      } else {
+        console.error('Failed to save outfit:', data.message);
+      }
+    })
+    .catch(error => console.error('Error saving outfit:', error));
+  };
+
+  swipeRightButton.addEventListener('click', () => {
+    const outfit = {
+      image: document.getElementById('outfitImage').src,
+    };
+
+    saveOutfit(outfit);
+    fetchNextOutfit(); // Proceed to the next outfit
+  });
+});
+
 
     document.addEventListener('DOMContentLoaded', function () {
   const cardStack = document.getElementById('cardStack');
