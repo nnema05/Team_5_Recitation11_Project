@@ -1,4 +1,4 @@
-</head>
+<head>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -24,7 +24,7 @@
     .border-bottom {
       border-bottom: 3px solid #ff66b2 !important;
     }
-      .profile-container {
+    .profile-container {
       max-width: 500px;
       margin: 20px auto;
       padding: 20px;
@@ -45,7 +45,6 @@
       text-align: center;
       grid-template-columns: 1fr 1fr;
       gap: 20px;
-      
     }
     .content-card {
       width: 100%;
@@ -57,27 +56,34 @@
       transition: transform 0.3s ease, opacity 0.3s ease;
     }
     .btn {
-    display: inline-block;
-    padding: 10px 20px;
-    margin: 10px 0;
-    color: #ffffff;
-    background-color: #ff00c3; /* Bright pink button */
-    text-decoration: none;
-    border-radius: 4px;
-    font-size: 16px;
-    text-align: center;
-    transition: background-color 0.3s ease;
-  }
-  .btn:hover {
-    background-color: #de0fa7; /* Slightly darker pink on hover */
-  }
+      display: inline-block;
+      padding: 10px 20px;
+      margin: 10px 0;
+      color: #ffffff;
+      background-color: #ff00c3; /* Bright pink button */
+      text-decoration: none;
+      border-radius: 4px;
+      font-size: 16px;
+      text-align: center;
+      transition: background-color 0.3s ease;
+    }
+    .btn:hover {
+      background-color: #de0fa7; /* Slightly darker pink on hover */
+    }
     .btn-swipe {
       margin: 10px;
     }
 
-  
+    /* Added CSS to handle image sizing */
+    .clothing-image {
+      max-width: 200px;  /* Limit image width */
+      max-height: 200px; /* Limit image height */
+      width: auto;       /* Maintain aspect ratio */
+      height: auto;      /* Maintain aspect ratio */
+    }
 
   </style>
+</head>
 <body>
   <h1 class="text-center mt-4">My Closet</h1>
 
@@ -99,28 +105,28 @@
     <button type="submit" class="btn btn-primary">Upload</button>
   </form>
 
-
-
-
   <div class="profile-container">
     <h2 class="title">Your Clothing Items</h2>
-
-   {{#if clothes.length}}
-      {{#each clothes}}
-        <div class="clothing-item">
-          <img src="{{this.image}}" alt="Clothing Image" class="clothing-image">
-          <div class="clothing-name">{{this.name}}</div>
-          <div class="clothing-tags">{{this.tags}}</div>
-        </div>
-      {{/each}}
-  {{else}}
-    <p class="text-center">No clothing items found in your closet. Start uploading!</p>
-  {{/if}}
+    {{#if error}}
+      <div class="error-message">{{error}}</div>
+    {{else}}
+      {{#if clothes.length}}
+        {{#each clothes}}
+          <div class="clothing-item">
+            <img src="{{this.image}}" alt="Clothing Image" class="clothing-image">
+            <div class="clothing-name">{{this.name}}</div>
+            <div class="clothing-tags">{{this.tags}}</div>
+          </div>
+        {{/each}}
+      {{else}}
+        <p class="text-center">No clothing items found in your closet. Start uploading!</p>
+      {{/if}}
+    {{/if}}
   </div>
 
-
-  </body>
+</body>
 </html>
+
 
   {{!-- {{#if images.length }}
   <div class="row">

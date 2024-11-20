@@ -15,7 +15,18 @@ const session = require('express-session'); // To set the session object. To sto
 const bcrypt = require('bcryptjs'); //  To hash passwords
 const axios = require('axios'); // To make HTTP requests from our server. We'll learn more about it in Part C.
 //const { Pool } = require('pg');
+const { Pool } = require('pg');
 
+const router = express.Router();
+
+// Configure the database connection
+const pool = new Pool({
+  user: 'username',
+  host: 'localhost',
+  database: 'myclothes',
+  password: 'password',
+  port: 5432, // Default PostgreSQL port
+});
 
 
 const jwt = require('jsonwebtoken');
@@ -198,9 +209,8 @@ app.get('/discover/next/:id', async (req, res) => {
 
 
 
-app.get('/mycloset', (req, res) => {
-  res.render('pages/mycloset');
-})
+
+
 
 app.get('/reset-password', (req, res) => {
   res.render('pages/reset-password');
@@ -615,85 +625,96 @@ function fileToBase64(filePath) {
 }
 
 // API route to handle file upload
-app.post('/upload', upload.single('image'), (req, res) => {
+
+
+app.post('/upload', upload.single('image'), async (req, res) => {
   const { name, tags } = req.body;
   const imageFile = req.file;
+  const userid = req.session.user.username;
 
   if (!imageFile) {
     return res.status(400).send('No file uploaded.');
   }
 
-  // Convert uploaded image to Base64
-  const base64Image = fileToBase64(imageFile.path);
+  try {
+    const base64Image = fileToBase64(imageFile.path);
 
-  // Create SQL insert statement
-  const sqlInsert = `
-INSERT INTO myclothes (name, tags, image)
-VALUES ('${name}', '${tags}', 'data:image/png;base64,${base64Image}');
-`;
+    // Insert into the myclothes table without user_id
+    const sqlInsert = `
+      INSERT INTO myclothes (name, tags, image, username)
+      VALUES ($1, $2, $3, $4)
+    `;
+    await db.none(sqlInsert, [name, tags, `data:image/png;base64,${base64Image}`, userid]);
 
-  // Append the insert statement to a file
-  fs.appendFile('insertClothes.sql', sqlInsert, (err) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).send('Failed to save insert statement.');
-    }
-
-    // Clean up the uploaded file after processing
-    fs.unlink(imageFile.path, (unlinkErr) => {
-      if (unlinkErr) console.error('Error deleting temporary file:', unlinkErr);
-    });
-
-    //res.status(200).send('Image uploaded and SQL insert statement saved!');
     res.redirect('/mycloset');
-  });
+  } catch (err) {
+    console.error('Database insert error:', err);
+    res.status(500).send('Failed to save clothing data.');
+  }
+});
+app.get('/mycloset', async (req, res) => {
+  const userid = req.session.user.username; 
+  try {
+    // Fetch all items from the myclothes table
+    const clothes = await db.any(`SELECT * FROM myclothes WHERE username = '${userid}'`);
+    
+    // Render the page and pass the clothes data
+    res.render('pages/mycloset', { clothes });
+  } catch (err) {
+    console.error('Database query error:', err.message, err.stack);
+    res.render('pages/mycloset', { error: 'Failed to retrieve clothing data. Please try again later.' });
+  }
 });
 
+// app.post('/upload', upload.single('image'), async (req, res) => {
+//   const { name, tags } = req.body;
+//   const imageFile = req.file;
+//   const userID = req.session.user_id; // Ensure session stores the username
+
+//   if (!userID) {
+//     return res.status(401).send('Unauthorized: Please log in to upload.');
+//   }
+
+//   if (!imageFile) {
+//     return res.status(400).send('No file uploaded.');
+//   }
+
+//   try {
+//     const base64Image = fileToBase64(imageFile.path);
+
+//     const sqlInsert = `
+//       INSERT INTO myclothes (name, tags, image, user_id)
+//       VALUES ($1, $2, $3, $4)
+//     `;
+//     await db.none(sqlInsert, [name, tags, `data:image/png;base64,${base64Image}`, userID]);
+
+//     res.redirect('/mycloset');
+//   } catch (err) {
+//     console.error('Database insert error:', err);
+//     res.status(500).send('Failed to save clothing data.');
+//   }
+// });
+
+// app.get('/mycloset', async (req, res) => {
+  
+  
+//   try {
+//     const clothes = await db.any('SELECT * FROM myclothes WHERE user_id );
+//     res.render('pages/mycloset', { clothes });
+//   } catch (err) {
+//     console.error('Database query error:', err.message, err.stack);
+//     res.render('pages/mycloset', { error: 'Failed to retrieve clothing data. Please try again later.' });
+//   }
+// });
 
 
-const { Pool } = require('pg');
 
-const router = express.Router();
 
-// Configure the database connection
-const pool = new Pool({
-  user: 'username',
-  host: 'localhost',
-  database: 'myclothes',
-  password: 'password',
-  port: 5432, // Default PostgreSQL port
-});
 
 // Route to fetch and render clothing data
-router.get('/myclothes', async (req, res) => {
-  const userId = req.session.username; // Assuming username is stored in session
 
-  if (!userId) {
-    return res.status(401).send('Unauthorized: Please log in to view your closet.');
-  }
 
-  try {
-    // Fetch clothing items for the logged-in user
-    const result = await pool.query('SELECT * FROM myclothes');
-    const clothes = result.rows; // Array of clothing items
-    // clothes.forEach((item, index) => {
-    //   console.log(`Clothing Item ${index + 1}:`);
-    //   console.log(`  Name: ${item.name}`);
-    //   console.log(`  Tags: ${item.tags}`);
-    //   console.log(`  Image: ${item.image}`);
-    // });
-
-    //console.log('Fetched clothes:', clothes); // Debugging
-
-    // Pass the fetched data to the template
-    res.render('myclothes', { clothes });
-  } catch (err) {
-    console.error('Error retrieving clothing data:', err);
-    res.status(500).send('Failed to retrieve clothing data.');
-  }
-});
-
-module.exports = router;
+//module.exports = router;
 
 
 // *****************************************************
