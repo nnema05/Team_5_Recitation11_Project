@@ -102,7 +102,10 @@ db.connect()
 // Register `hbs` as our view engine using its bound `engine()` function.
 app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
-app.use(bodyParser.json()); // specify the usage of JSON for parsing request body.
+// app.use(bodyParser.json()); // specify the usage of JSON for parsing request body.
+app.use(bodyParser.json({ limit: '50mb' })); // Increase the limit for JSON payloads
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true })); // Increase the limit for form submissions
+app.use(express.static(__dirname + '/Data_Conversion'));
 
 // initialize session variables
 app.use(
@@ -122,7 +125,6 @@ app.use(
 // *****************************************************
 // <!-- Section 4 : API Routes -->
 // *****************************************************
-
 
 // TODO - Include your API routes here
 app.get('/welcome', (req, res) => {
@@ -168,6 +170,37 @@ app.get('/register', (req, res) => {
 //   }
 // });
 
+// WITH BASE 64!!
+// get request that swipes through images and disaplys them on app!
+// app.get('/discover', async (req, res) => {
+//   try {
+//     // Fetch the first outfit by default
+//     const outfit = await db.oneOrNone('SELECT id, name, tags, image FROM outfits WHERE id = $1', [1]); // Start with id=1
+//     res.render('pages/discover', { outfit });
+//   } catch (error) {
+//     console.error('Error fetching outfit from database:', error);
+//     res.render('pages/discover', { outfit: null, message: 'Failed to load outfit.' });
+//   }
+// });
+
+// // API endpoint to fetch the next outfit based on the current ID
+// app.get('/discover/next/:id', async (req, res) => {
+//   const currentId = parseInt(req.params.id, 10);
+//   try {
+//     const outfit = await db.oneOrNone('SELECT id, name, tags, image FROM outfits WHERE id > $1 ORDER BY id ASC LIMIT 1', [currentId]);
+
+//     if (outfit) {
+//       res.json({ success: true, outfit });
+//     } else {
+//       res.json({ success: false, message: 'No more outfits.' });
+//     }
+//   } catch (error) {
+//     console.error('Error fetching the next outfit:', error);
+//     res.status(500).json({ success: false, message: 'Failed to load next outfit.' });
+//   }
+// });
+
+// IS THERE A PROBLEM WITH THE DISOCVER
 app.get('/discover', async (req, res) => {
   try {
     // Fetch the first outfit by default
@@ -179,7 +212,6 @@ app.get('/discover', async (req, res) => {
   }
 });
 
-// API endpoint to fetch the next outfit based on the current ID
 app.get('/discover/next/:id', async (req, res) => {
   const currentId = parseInt(req.params.id, 10);
   try {
@@ -197,6 +229,29 @@ app.get('/discover/next/:id', async (req, res) => {
 });
 
 
+// saves clothes to users database!
+app.post('/save-clothes', async (req, res) => {
+  const { username, outfit } = req.body;
+
+  if (!username || !outfit) {
+    return res.status(400).json({ success: false, message: 'Invalid data' });
+  }
+
+  try {
+    // Add the outfit's base64 string to the user's `myclothes` array
+    await db.none(
+      `UPDATE users 
+       SET myclothes = array_append(myclothes, $1) 
+       WHERE username = $2`,
+      [outfit.image, username]
+    );
+
+    res.json({ success: true, message: 'Outfit saved!' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Database error' });
+  }
+});
 
 app.get('/mycloset', (req, res) => {
   res.render('pages/mycloset');
@@ -205,9 +260,6 @@ app.get('/mycloset', (req, res) => {
 app.get('/reset-password', (req, res) => {
   res.render('pages/reset-password');
 });
-
-
-
 
 
 
@@ -424,52 +476,6 @@ app.get('/logout', (req, res) => {
 });
 
 
-
-
-
-// handles profile 
-// renders page:
-// app.get('/profile', (req, res) => {
-//   if (!req.session.user) {
-//     return res.status(401).send('Not authenticated');
-//   }
-//   try {
-//     res.render('pages/profile', { username: req.session.user.username });
-//   } catch (err) {
-//     console.error('Profile error:', err);
-//     res.status(500).send('Internal Server Error');
-//   }
-// });
-
-//sends json
-
-// app.get('/profile', auth, (req, res) => {  // Use the auth middleware
-//   try {
-//     res.status(200).json({
-//       username: req.session.user.username,
-//     });
-//   } catch (err) {
-//     console.error('Profile error:', err);
-//     res.status(500).send('Internal Server Error');
-//   }
-// });
-
-
-
-// WITH THE BELOW TWO CHANGES, ALLOWS THE TEST TO PASS BUT DOESNT RENDER PROFILE CORRECTLY, HAVE TO COMMENT OUT  JSON GET AND THE TEST TO RENDER CORRECTLY
-// app.get('/profile', auth, (req, res) => {
-//   try {
-//     if (!req.session.user) {
-//       return res.status(401).send('Not authenticated');
-//     }
-//     res.status(200).json({
-//       username: req.session.user.username,
-//     });
-//   } catch (err) {
-//     console.error('Profile error:', err);
-//     res.status(500).send('Internal Server Error');
-//   }
-// });
 
 
 app.get('/profile', (req, res) => {
