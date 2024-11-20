@@ -660,19 +660,19 @@ app.post('/upload', upload.single('image'), async (req, res) => {
   }
 });
 
-const getRightSwipedClothes = async (username) => {
-  try {
-    // Fetch right-swiped clothes from the database
-    const result = await db.any(
-      `SELECT unnest(myclothes) AS clothing_item FROM users WHERE username = $1`,
-      [username]
-    );
-    return result.map(item => ({ name: item.clothing_item }));
-  } catch (error) {
-    console.error('Error fetching right-swiped clothes:', error);
-    throw error;
-  }
-};
+// const getRightSwipedClothes = async (username) => {
+//   try {
+//     // Fetch right-swiped clothes from the database
+//     const result = await db.any(
+//       `SELECT unnest(myclothes) AS clothing_item FROM users WHERE username = $1`,
+//       [username]
+//     );
+//     return result.map(item => ({ name: item.clothing_item }));
+//   } catch (error) {
+//     console.error('Error fetching right-swiped clothes:', error);
+//     throw error;
+//   }
+// };
 
 app.get('/mycloset', async (req, res) => {
   const userid = req.session.user.username; 
@@ -686,6 +686,15 @@ app.get('/mycloset', async (req, res) => {
     console.error('Database query error:', err.message, err.stack);
     res.render('pages/mycloset', { error: 'Failed to retrieve clothing data. Please try again later.' });
   }
+// this try should work but it jsut needs to add when something gets swiped right this is the problem. 
+  // try {
+  //   // Fetch the first outfit by default
+  //   const mysavedclothes = await db.oneOrNone(`SELECT myclothes FROM users WHERE username = '${userid}'`); 
+  //   res.render('pages/mycloset', { mysavedclothes });
+  // } catch (error) {
+  //   console.error('Error fetching outfit from database:', error);
+  //   res.render('pages/mycloset', { outfit: null, message: 'Failed to load outfit.' });
+  // }
 
   // try {
   //   // Fetch the user's `myclothes` array from the database
