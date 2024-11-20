@@ -59,14 +59,14 @@ if (!fs.existsSync(uploadDir)) {
 
 
 // Configure multer for file storage
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, uploadDir);
-    },
-    filename: (req, file, cb) => {
-        cb(null, `${Date.now()}-${file.originalname}`);
-    },
-});
+// const storage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//         cb(null, uploadDir);
+//     },
+//     filename: (req, file, cb) => {
+//         cb(null, `${Date.now()}-${file.originalname}`);
+//     },
+// });
 //const upload = multer({ storage });
 
 
@@ -622,8 +622,8 @@ app.get('/profile', (req, res) => {
 // NEED TO RUN  node toBase64.js IF YOU ADD TO THIS!!!
 
 
-
-const upload = multer({ dest: 'uploads/' }); // Temporary storage for uploaded files
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage, dest: 'uploads/' }); // Temporary storage for uploaded files
 
 // Convert a file to Base64
 function fileToBase64(filePath) {
@@ -644,14 +644,21 @@ app.post('/upload', upload.single('image'), async (req, res) => {
   }
 
   try {
-    const base64Image = fileToBase64(imageFile.path);
+    // Define the local path where the file should be saved
+    const savePath = path.join(__dirname,'/uploads', imageFile.originalname);
+    //console.log(_dirname); 
+    console.log(savePath);
+ 
+    fs.writeFileSync(savePath, imageFile.buffer);
+    
+    //const base64Image = fileToBase64(imageFile.path);
 
     // Insert into the myclothes table without user_id
     const sqlInsert = `
       INSERT INTO myclothes (name, tags, image, username)
       VALUES ($1, $2, $3, $4)
     `;
-    await db.none(sqlInsert, [name, tags, `data:image/png;base64,${base64Image}`, userid]);
+    await db.none(sqlInsert, [name, tags, savePath , userid]);
 
     res.redirect('/mycloset');
   } catch (err) {
@@ -659,6 +666,12 @@ app.post('/upload', upload.single('image'), async (req, res) => {
     res.status(500).send('Failed to save clothing data.');
   }
 });
+
+//`data:image/png;base64,${base64Image}`
+
+
+
+ 
 
 // const getRightSwipedClothes = async (username) => {
 //   try {
@@ -675,17 +688,67 @@ app.post('/upload', upload.single('image'), async (req, res) => {
 // };
 
 app.get('/mycloset', async (req, res) => {
-  const userid = req.session.user.username; 
+  const username = req.session.user.username;
+
   try {
-    // Fetch all items from the myclothes table
-    const clothes = await db.any(`SELECT * FROM myclothes WHERE username = '${userid}'`);
+    // Fetch uploaded items from the `myclothes` table
+    const uploadedClothes = await db.any(
+      `SELECT name, tags, image FROM myclothes WHERE username = $1`,
+      [username]
+    );
+
+    // Fetch right-swiped items from the `users` table (myclothes array)
+    const user = await db.oneOrNone(
+      `SELECT myclothes FROM users WHERE username = $1`,
+      [username]
+    );
+    uploadedClothesModified = uploadedClothes.map(data => ({
+      name: data.name,
+      tags: data.tags, // Corrected property access
+      image: data.image.slice(11) // Use data.image instead of image
+    }));
     
-    // Render the page and pass the clothes data
-    res.render('pages/mycloset', { clothes });
+    // console.log(uploadedClothesModified);
+    
+    const rightSwipedClothes = user?.myclothes
+      ? user.myclothes.map((image, index) => ({
+          id: index + 1,
+          image: image.slice(11), // Correctly slicing the image
+          name: `Outfit ${index + 1}`, // Placeholder name
+          tags: '', // Placeholder tags
+        }))
+      : [];
+    
+
+    // Render both uploaded and right-swiped clothes
+    res.render('pages/mycloset', { 
+      clothes: uploadedClothesModified, 
+      rightSwipedClothes 
+    });
   } catch (err) {
-    console.error('Database query error:', err.message, err.stack);
-    res.render('pages/mycloset', { error: 'Failed to retrieve clothing data. Please try again later.' });
+    console.error('Error retrieving closet data:', err.message, err.stack);
+    res.render('pages/mycloset', {
+      clothes: [],
+      rightSwipedClothes: [],
+      error: 'Failed to load your closet. Please try again later.',
+    });
   }
+});
+// THIS IS THE WORKING ONE 
+// app.get('/mycloset', async (req, res) => {
+//   const userid = req.session.user.username; 
+//   try {
+//     // Fetch all items from the myclothes table
+//     const clothes = await db.any(`SELECT * FROM myclothes WHERE username = '${userid}'`);
+    
+//     // Render the page and pass the clothes data
+//     res.render('pages/mycloset', { clothes });
+//   } catch (err) {
+//     console.error('Database query error:', err.message, err.stack);
+//     res.render('pages/mycloset', { error: 'Failed to retrieve clothing data. Please try again later.' });
+//   }
+// });
+// THIS IS THE WORKING ONE 
 // this try should work but it jsut needs to add when something gets swiped right this is the problem. 
   // try {
   //   // Fetch the first outfit by default
@@ -715,7 +778,7 @@ app.get('/mycloset', async (req, res) => {
   //   }
   // }
   
-  });
+ 
   
 
 
