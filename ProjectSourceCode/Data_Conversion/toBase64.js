@@ -188,6 +188,107 @@ image_array = [
         tag: 'white',
         filename: 'img/image30.jpeg'
     },
+    {
+        name: 'Dress',
+        tag: 'green',
+        filename: 'img/image31.jpeg'
+
+    },
+    {
+        name: 'Skirt',
+        tag: 'white',
+        filename: 'img/image32.jpeg'
+    },
+    {
+        name: 'Sweater',
+        tag: 'gray',
+        filename: 'img/image33.jpeg'
+    },
+    {
+        name: 'Vesy',
+        tag: 'blue',
+        filename: 'img/image34.jpeg'
+    },
+    {
+        name: 'Overalls',
+        tag: 'blue',
+        filename: 'img/image35.jpeg'
+    },
+    {
+        name: 'Green',
+        tag: 'dress',
+        filename: 'img/image36.jpeg'
+    },
+    {
+        name: 'Green',
+        tag: 'sweater',
+        filename: 'img/image37.jpeg'
+    },
+    {
+        name: 'Jacket',
+        tag: 'multicolor',
+        filename: 'img/image38.jpeg'
+    },
+    {
+        name: 'Pants',
+        tag: 'orange',
+        filename: 'img/image39.jpeg'
+    },
+    {
+        name: 'Pants',
+        tag: 'blue',
+        filename: 'img/image40.jpeg'
+    },
+    {
+        name: 'Jacket',
+        tag: 'green',
+        filename: 'img/image41.jpeg'
+    },
+    {
+        name: 'Skirt',
+        tag: 'green',
+        filename: 'img/image42.jpeg'
+    },
+    {
+        name: 'Overalls',
+        tag: 'pink',
+        filename: 'img/image43.jpeg'
+    },
+    {
+        name: 'Sweater',
+        tag: 'multicolor',
+        filename: 'img/image44.jpeg'
+    },
+    {
+        name: 'Jacket',
+        tag: 'green',
+        filename: 'img/image45.jpeg'
+    },
+    {
+        name: 'Shirt',
+        tag: 'green',
+        filename: 'img/image46.jpeg'
+    },
+    {
+        name: 'Dress',
+        tag: 'pink',
+        filename: 'img/image47.jpeg'
+    },
+    {
+        name: 'Jacket',
+        tag: 'brown',
+        filename: 'img/image48.jpeg'
+    },
+    {
+        name: 'Swater',
+        tag: 'multicolor',
+        filename: 'img/image49.jpeg'
+    },
+    {
+        name: 'Pants',
+        tag: 'brown',
+        filename: 'img/image50.jpeg'
+    },
 ]
 
 // // make insert into file that will go into insert.sql!!!
@@ -222,7 +323,7 @@ fs.writeFile('output.sql', inserts, (err) => {
         return;
     }
     console.log('File has been written successfully.');
-});p
+});
 
 
 
