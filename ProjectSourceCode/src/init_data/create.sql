@@ -15,8 +15,8 @@ CREATE TABLE IF NOT EXISTS outfits (
 
 CREATE TABLE IF NOT EXISTS myclothes (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(50),
-    tags TEXT,
-    image TEXT,
-    user_id VARCHAR(50) REFERENCES users(username)
+    name VARCHAR(50) NOT NULL,
+    tags TEXT NOT NULL,
+    image TEXT NOT NULL,
+    username VARCHAR(50) NOT NULL REFERENCES users(username) ON DELETE CASCADE
 );
