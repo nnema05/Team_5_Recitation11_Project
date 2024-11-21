@@ -736,6 +736,45 @@ app.post('/upload', upload.single('image'), async (req, res) => {
 //   }
 // });
 
+// app.get('/mycloset', async (req, res) => {
+//   const username = req.session.user.username;
+
+//   try {
+//     // Fetch uploaded items from the `myclothes` table
+//     const uploadedClothes = await db.any(
+//       `SELECT name, tags, image FROM myclothes WHERE username = $1`,
+//       [username]
+//     );
+
+//     // // Fetch right-swiped items from the `users` table (myclothes array)
+//     // const user = await db.oneOrNone(
+//     //   `SELECT myclothes FROM users WHERE username = $1`,
+//     //   [username]
+//     // );
+//     uploadedClothesModified = uploadedClothes.map(data => ({
+//       name: data.name,
+//       tags: data.tags, // Corrected property access
+//       image: data.image.slice(11) // Use data.image instead of image
+//     }));
+    
+//     // console.log(uploadedClothesModified);
+    
+    
+
+//     // Render both uploaded and right-swiped clothes
+//     res.render('pages/mycloset', { 
+//       clothes: uploadedClothesModified, 
+
+//     });
+//   } catch (err) {
+//     console.error('Error retrieving closet data:', err.message, err.stack);
+//     res.render('pages/mycloset', {
+//       clothes: [],
+//       error: 'Failed to load your closet. Please try again later.',
+//     });
+//   }
+// });
+
 app.get('/mycloset', async (req, res) => {
   const username = req.session.user.username;
 
@@ -746,34 +785,38 @@ app.get('/mycloset', async (req, res) => {
       [username]
     );
 
-    // // Fetch right-swiped items from the `users` table (myclothes array)
-    // const user = await db.oneOrNone(
-    //   `SELECT myclothes FROM users WHERE username = $1`,
-    //   [username]
-    // );
-    uploadedClothesModified = uploadedClothes.map(data => ({
+    // Fetch saved (right-swiped) items from the `savedclothes` table
+    const savedClothes = await db.any(
+      `SELECT image FROM savedclothes WHERE username = $1`,
+      [username]
+    );
+
+    // Modify the fetched data (if necessary, e.g., extracting image paths)
+    const uploadedClothesModified = uploadedClothes.map(data => ({
       name: data.name,
-      tags: data.tags, // Corrected property access
-      image: data.image.slice(11) // Use data.image instead of image
+      tags: data.tags,
+      image: data.image.slice(11), // Assuming image URLs need slicing
     }));
-    
-    // console.log(uploadedClothesModified);
-    
-    
 
-    // Render both uploaded and right-swiped clothes
+    const savedClothesModified = savedClothes.map(data => ({
+      image: data.image, // Assuming image URLs need slicing
+    }));
+
+    // Render the closet page with both uploaded and saved clothes
     res.render('pages/mycloset', { 
-      clothes: uploadedClothesModified, 
-
+      clothes: uploadedClothesModified,
+      savedClothes: savedClothesModified // Passing saved clothes to the view
     });
   } catch (err) {
     console.error('Error retrieving closet data:', err.message, err.stack);
     res.render('pages/mycloset', {
       clothes: [],
+      savedClothes: [], // If an error occurs, send empty arrays
       error: 'Failed to load your closet. Please try again later.',
     });
   }
 });
+
 
 
 // this try should work but it jsut needs to add when something gets swiped right this is the problem. 
