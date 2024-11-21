@@ -98,7 +98,22 @@
   {{> message }}
 
   <form action="/upload" method="POST" enctype="multipart/form-data" class="text-center mt-4">
-    <!-- Your existing form elements -->
+    <!-- Upload Form -->
+    <form action="/upload" method="POST" enctype="multipart/form-data" class="text-center mt-4">
+    <div class="mb-3">
+    <label for="imageUpload" class="form-label">Upload an Image</label>
+      <input class="form-control" type="file" id="imageUpload" name="image" accept="image/*" required>
+      </div>
+    <div class="mb-3">
+    <label for="imageName" class="form-label">Image Name</label>
+    <input class="form-control" type="text" id="imageName" name="name" placeholder="Image Name">
+    </div>
+    <div class="mb-3">
+    <label for="tags" class="form-label">Tags (comma-separated)</label>
+  <input class="form-control" type="text" id="tags" name="tags" placeholder="e.g., green, skirt">
+    </div>
+    <button type="submit" class="btn">Upload</button>
+    </form>
   </form>
 
   <!-- Uploaded Clothing Items Section -->

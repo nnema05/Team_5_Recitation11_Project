@@ -49,6 +49,16 @@
   .text-center a:hover {
     color: #de0fa7; /* Darker pink on hover */
   }
+  .error-message {
+  color: #ff007f; /* Bright pink */
+  background-color: #ffe6f2; /* Light pink background */
+  padding: 10px;
+  border: 1px solid #ff007f; /* Border in the same pink */
+  border-radius: 4px;
+  margin-top: 10px;
+  text-align: center;
+  font-size: 16px;
+}
 </style>
 
   <div class="container mt-5">
@@ -56,7 +66,7 @@
   
   <!-- Display error message if user already exists -->
   {{#if error}}
-    <div class="alert alert-danger mt-3">
+    <div class="error-message">
       {{error}}
     </div>
   {{/if}}

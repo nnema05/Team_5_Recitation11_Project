@@ -154,8 +154,19 @@ app.get('/login', (req, res) => {
 });
 
 app.get('/register', (req, res) => {
-  res.render('pages/register', { layout : 'main', isRegisterPage: true });
+  // Check for error query parameter and set a user-friendly error message
+  const error = req.query.error === 'username-exists'
+    ? 'Username already exists. Please choose a new one.'
+    : null;
+
+  // Render the registration page with the error message and layout options
+  res.render('pages/register', {
+    layout: 'main', 
+    isRegisterPage: true, 
+    error
+  });
 });
+
 
 // app.get('/register', (req, res) => {
 //   res.render('pages/register');
@@ -308,7 +319,7 @@ app.get('/reset-password', (req, res) => {
 
 app.post('/register', async (req, res) => {
   try {
-    // validate input -
+
     if (!req.body.username || !req.body.password) {
       if (req.headers['x-test-request']) {
         return res.status(400).json({ message: 'Invalid input' });
@@ -316,18 +327,29 @@ app.post('/register', async (req, res) => {
       return res.redirect('/register');
     }
 
-    // hash the password using bcrypt library
+  
+    const existingUser = await db.oneOrNone('SELECT username FROM users WHERE username = $1', [req.body.username]);
+
+    if (existingUser) {
+      if (req.headers['x-test-request']) {
+        return res.status(400).json({ message: 'Username already exists. Please choose a new one.' });
+      }
+
+      return res.redirect('/register?error=username-exists');
+    }
+
+    
     const hash = await bcrypt.hash(req.body.password, 10);
 
-    // insert username and hashed password into the 'users' table
+    
     await db.none('INSERT INTO users(username, password) VALUES($1, $2)', [req.body.username, hash]);
 
-    // check if the request came from the test case 
+    
     if (req.headers['x-test-request']) {
       return res.status(200).json({ message: 'Success' });
     }
 
-    // redirect to GET /login route after successful registration in normal operations
+   
     res.redirect('/login');
   } catch (error) {
     console.error('Registration error:', error.message || error);
@@ -341,6 +363,43 @@ app.post('/register', async (req, res) => {
     res.redirect('/register');
   }
 });
+
+
+// app.post('/register', async (req, res) => {
+//   try {
+//     // validate input -
+//     if (!req.body.username || !req.body.password) {
+//       if (req.headers['x-test-request']) {
+//         return res.status(400).json({ message: 'Invalid input' });
+//       }
+//       return res.redirect('/register');
+//     }
+
+//     // hash the password using bcrypt library
+//     const hash = await bcrypt.hash(req.body.password, 10);
+
+//     // insert username and hashed password into the 'users' table
+//     await db.none('INSERT INTO users(username, password) VALUES($1, $2)', [req.body.username, hash]);
+
+//     // check if the request came from the test case 
+//     if (req.headers['x-test-request']) {
+//       return res.status(200).json({ message: 'Success' });
+//     }
+
+//     // redirect to GET /login route after successful registration in normal operations
+//     res.redirect('/login');
+//   } catch (error) {
+//     console.error('Registration error:', error.message || error);
+
+//     // send a JSON response if there's an error during testing
+//     if (req.headers['x-test-request']) {
+//       return res.status(500).json({ message: 'Error registering user' });
+//     }
+
+//     // redirect back to the registration page if there's an error in normal operations
+//     res.redirect('/register');
+//   }
+// });
 
 // OLD LOGIN ROUTE--> DONT DELETE UNTIL VERY END!!!
 // app.post('/login', async (req, res) => {
