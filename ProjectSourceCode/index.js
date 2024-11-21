@@ -402,6 +402,37 @@ app.post('/login', async (req, res) => {
 });
 
 
+//reset password!
+// Reset password route
+app.post('/reset-password', async (req, res) => {
+  const { username, newPassword, confirmPassword } = req.body;
+
+  // Check if passwords match
+  if (newPassword !== confirmPassword) {
+    return res.status(400).send('Passwords do not match');
+  }
+
+  try {
+    // Find the user by username
+    const user = await db.oneOrNone('SELECT * FROM users WHERE username = $1', [username]);
+
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    // Hash the new password before saving
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Update user's password
+    await db.none('UPDATE users SET password = $1 WHERE username = $2', [hashedPassword, username]);
+
+    // Redirect to login page after password reset
+    res.redirect('/login');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+});
 
 
 
