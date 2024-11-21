@@ -1,9 +1,42 @@
-<footer class="text-center text-muted w-100 mt-auto fixed-bottom">
-    
-    {{!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-h3hEmtHJb5xxuuODLUVcU/PkNhFi0AhIQOoFO/sU6BxwKnJfT52cuxJ+vrGX9TwF" crossorigin="anonymous"></script> --}}
+<footer class="text-center text-muted w-100 mt-auto custom-footer" style="padding: 20px; background-color: #f8f9fa;">
+    <style>
+        /* Ensure html and body take up the full height */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Flexbox layout for the body */
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Main content area should flex to fill available space */
+        main {
+            flex: 1;
+        }
+
+        /* Footer styling */
+        .custom-footer {
+            margin-top: auto;
+            /* Additional footer styles if needed */
+        }
+
+        /* Prevent overlapping by clearing floats (if any) */
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+    </style>
+
     <p>
-        &copy; Copyright 2024 : CSCI 3308 - Team 5 Project 11
+        &copy; 2024 : CSCI 3308 - Team 5 Project 11
     </p>
 </footer>
+
 </body>
 </html>

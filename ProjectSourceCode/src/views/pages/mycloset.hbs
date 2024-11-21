@@ -1,124 +1,229 @@
- <style>
-  body {
-  font-family: Arial, sans-serif;
-  background-color: #ffe6f0;
-  margin: 0;
-  padding: 0;
-}
-.navbar {
-  background-color: #ff99cc;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-}
-.navbar-toggler-icon {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255,102,178,1)' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
-}
-.nav-link {
-  color: white !important;
-  font-weight: bold;
-  transition: color 0.3s ease;
-}
-.nav-link:hover {
-  color: #ffccff !important;
-}
-.border-bottom {
-  border-bottom: 3px solid #ff66b2 !important;
-}
-.profile-container {
-  max-width: 1200px; /* Increased max-width for more space */
-  margin: 20px auto;
-  padding: 20px;
-  background-color: #ff99cc;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
-}
-.title {
-  text-align: center;
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-/* New styles for card-stack */
-.card-stack {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive columns */
-  gap: 20px;
-  text-align: center;
-}
-.content-card {
-  background-color: #ffe6f0;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  padding: 20px;
-  transition: transform 0.3s ease, opacity 0.3s ease;
-}
-.content-card:hover {
-  transform: scale(1.05); /* Add a hover effect */
-}
-.clothing-image {
-  max-width: 100%;  
-  height: auto;      
-  border-radius: 8px;
-}
-.clothing-name {
-  font-weight: bold;
-  margin-top: 10px;
-}
-.clothing-tags {
-  font-style: italic;
-  color: #666;
-  margin-top: 5px;
-}
-.btn {
-  display: inline-block;
-  padding: 10px 20px;
-  margin: 10px 0;
-  color: #ffffff;
-  background-color: #ff00c3; /* Bright pink button */
-  text-decoration: none;
-  border-radius: 4px;
-  font-size: 16px;
-  text-align: center;
-  transition: background-color 0.3s ease;
-}
-.btn:hover {
-  background-color: #de0fa7; /* Slightly darker pink on hover */
-}
-.btn-swipe {
-  margin: 10px;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <style>
+    /* Base Styles */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #ff66b2; /* Pink background to highlight stars */
+      margin: 0;
+      padding: 0;
+    }
 
+    /* Shooting Stars Styles */
+    .star {
+      position: absolute;
+      top: -10px;
+      width: 4px;
+      height: 160px;
+      background: linear-gradient(45deg, rgba(255,255,255,1), rgba(255,255,255,0));
+      opacity: 0.8;
+      transform: rotate(45deg);
+      animation: shootingStar 5s linear infinite;
+    }
+
+    @keyframes shootingStar {
+      0% {
+        transform: translateX(0) translateY(0) rotate(45deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateX(-500px) translateY(500px) rotate(45deg);
+        opacity: 0;
+      }
+    }
+
+    /* Shooting Stars Positions */
+    .star:nth-child(1) { animation-delay: 0s; left: 10%; }
+    .star:nth-child(2) { animation-delay: 1s; left: 20%; }
+    .star:nth-child(3) { animation-delay: 2s; left: 30%; }
+    .star:nth-child(4) { animation-delay: 3s; left: 40%; }
+    .star:nth-child(5) { animation-delay: 4s; left: 50%; }
+    .star:nth-child(6) { animation-delay: 5s; left: 60%; }
+    .star:nth-child(7) { animation-delay: 6s; left: 70%; }
+    .star:nth-child(8) { animation-delay: 7s; left: 80%; }
+    .star:nth-child(9) { animation-delay: 8s; left: 90%; }
+    .star:nth-child(10) { animation-delay: 9s; left: 25%; }
+
+    /* Navbar Styles (if applicable) */
+    .navbar {
+      background-color: #ff99cc;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .navbar-toggler-icon {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255,102,178,1)' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+    }
+    .nav-link {
+      color: white !important;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+    .nav-link:hover {
+      color: #ffccff !important;
+    }
+    .border-bottom {
+      border-bottom: 3px solid #ff66b2 !important;
+    }
+
+    /* Profile Container Styles */
+    .profile-container {
+      max-width: 800px;
+      margin: 40px auto;
+      background-color: #ffffff; /* White background for content */
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      position: relative;
+      z-index: 1; /* Ensure content is above the stars */
+    }
+    .profile-container h1,
+    .profile-container h2 {
+      color: #ff66b2;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    /* Add star emojis before and after the headings */
+    .profile-container h1::before,
+    .profile-container h1::after,
+    .profile-container h2::before,
+    .profile-container h2::after {
+      content: "⭐";
+      margin: 0 5px;
+    }
+    .title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+    /* Card Stack Styles */
+    .card-stack {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    .content-card {
+      background-color: #ffe6f0;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .content-card:hover {
+      transform: scale(1.05);
+    }
+    .clothing-image {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+    .clothing-name {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    .clothing-tags {
+      font-style: italic;
+      color: #666;
+      margin-top: 5px;
+    }
+    /* Button Styles */
+    .btn {
+      display: inline-block;
+      padding: 12px 25px;
+      margin: 10px 0;
+      color: #ffffff;
+      background: linear-gradient(45deg, #ff99cc, #ff66b2);
+      text-decoration: none;
+      border-radius: 30px;
+      font-size: 16px;
+      text-align: center;
+      transition: background 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+    .btn:hover {
+      background: linear-gradient(45deg, #ff80bf, #ff4da6);
+    }
+    .btn::after {
+      content: '';
+      position: absolute;
+      left: -50%;
+      top: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at center, rgba(255, 102, 178, 0.2), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .btn:hover::after {
+      opacity: 1;
+    }
+    .btn-swipe {
+      margin: 10px;
+    }
+    /* Form Styles */
+    .form-label {
+      color: #ff66b2;
+      font-weight: bold;
+    }
+    .form-control {
+      border-radius: 8px;
+      border: 2px solid #ff66b2;
+    }
+    /* Message Styles (if any) */
+    .message {
+      color: #ff66b2;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
   </style>
 </head>
 <body>
-  <h1 class="text-center mt-4">My Closet</h1>
+  <!-- Shooting Stars -->
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
 
-  {{> message }}
+  <div class="profile-container">
+    <h1>My Closet</h1>
 
-  <form action="/upload" method="POST" enctype="multipart/form-data" class="text-center mt-4">
+
+
     <!-- Upload Form -->
     <form action="/upload" method="POST" enctype="multipart/form-data" class="text-center mt-4">
-    <div class="mb-3">
-    <label for="imageUpload" class="form-label">Upload an Image</label>
-      <input class="form-control" type="file" id="imageUpload" name="image" accept="image/*" required>
+      <div class="mb-3">
+        <label for="imageUpload" class="form-label">Upload an Image</label>
+        <input class="form-control" type="file" id="imageUpload" name="image" accept="image/*" required>
       </div>
-    <div class="mb-3">
-    <label for="imageName" class="form-label">Image Name</label>
-    <input class="form-control" type="text" id="imageName" name="name" placeholder="Image Name">
-    </div>
-    <div class="mb-3">
-    <label for="tags" class="form-label">Tags (comma-separated)</label>
-  <input class="form-control" type="text" id="tags" name="tags" placeholder="e.g., green, skirt">
-    </div>
-    <button type="submit" class="btn">Upload</button>
+      <div class="mb-3">
+        <label for="imageName" class="form-label">Image Name</label>
+        <input class="form-control" type="text" id="imageName" name="name" placeholder="Image Name">
+      </div>
+      <div class="mb-3">
+        <label for="tags" class="form-label">Tags (comma-separated)</label>
+        <input class="form-control" type="text" id="tags" name="tags" placeholder="e.g., green, skirt">
+      </div>
+      <button type="submit" class="btn">Upload</button>
     </form>
-  </form>
 
-  <!-- Uploaded Clothing Items Section -->
-  <div class="profile-container">
-    <h2 class="title">Uploaded Clothing Items</h2>
+    <!-- Uploaded Clothing Items Section -->
+    <h2>Uploaded Clothing Items</h2>
     {{#if clothes.length}}
       <div class="card-stack">
         {{#each clothes}}
@@ -132,26 +237,26 @@
     {{else}}
       <p class="text-center">No uploaded clothing items found in your closet. Start uploading!</p>
     {{/if}}
-  </div>
 
-  <!-- Right Swiped Clothes Section -->
-  <div class="profile-container">
-    <h2 class="title">Saved Clothes</h2>
+    <!-- Saved Clothes Section -->
+    <h2>Saved Clothes</h2>
     {{#if savedClothes.length}}
       <div class="card-stack">
         {{#each savedClothes}}
           <div class="content-card">
-            <img src="{{this.image}}" alt="Right Swiped Clothing Image" class="clothing-image">
+            <img src="{{this.image}}" alt="Saved Clothing Image" class="clothing-image">
             <div class="clothing-name">{{this.name}}</div>
             <div class="clothing-tags">{{this.tags}}</div>
           </div>
         {{/each}}
       </div>
     {{else}}
-      <p class="text-center">No right-swiped clothing items found.</p>
+      <p class="text-center">No saved clothing items found.</p>
     {{/if}}
   </div>
+
 </body>
+</html>
 
 
 {{!-- <head>
