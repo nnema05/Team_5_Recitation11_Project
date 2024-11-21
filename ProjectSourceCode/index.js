@@ -240,27 +240,57 @@ app.get('/discover/next/:id', async (req, res) => {
 });
 
 
-// saves clothes to users database!
-app.post('/save-clothes', async (req, res) => {
-  const { username, outfit } = req.body;
+//saves clothes to users database!
+// app.post('/save-clothes', async (req, res) => {
+//   const { username, outfit } = req.body;
 
-  if (!username || !outfit) {
+//   if (!username || !outfit) {
+//     return res.status(400).json({ success: false, message: 'Invalid data' });
+//   }
+
+//   try {
+//     // Add the outfit's base64 string to the user's `myclothes` array
+//     await db.none(
+//       `UPDATE users 
+//        SET myclothes = array_append(myclothes, $1) 
+//        WHERE username = $2`,
+//       [outfit.image, username]
+//     );
+//     console.log("outfit saved!");
+//     res.json({ success: true, message: 'Outfit saved!' });
+//   } catch (error) {
+//     console.log("does not save");
+//     console.error(error);
+//     res.status(500).json({ success: false, message: 'Database error' });
+//   }
+// });
+
+app.post('/save-clothes', async (req, res) => {
+  console.log("hi");
+  const image = req.body.image; // Expecting the full outfit object
+  const username = req.session.user.username;
+  console.log(username)
+  console.log(image)
+  if (!username || !image) {
     return res.status(400).json({ success: false, message: 'Invalid data' });
   }
 
   try {
-    // Add the outfit's base64 string to the user's `myclothes` array
+    const cutImage = image.split('/').slice(-2).join('/');  
+    // testing
+    console.log(`Inserting into savedclothes: outfitId=${cutImage}, username=${username}`);
+
+    // Insert the outfit image into database
     await db.none(
-      `UPDATE users 
-       SET myclothes = array_append(myclothes, $1) 
-       WHERE username = $2`,
-      [outfit.image, username]
+      `INSERT INTO savedclothes (image, username) 
+       VALUES ($1, $2)`, 
+      [cutImage, username]
     );
-    console.log("outfit saved!");
+
+    console.log('Outfit saved to savedclothes!');
     res.json({ success: true, message: 'Outfit saved!' });
   } catch (error) {
-    console.log("does not save");
-    console.error(error);
+    console.log('Error saving outfit:', error);
     res.status(500).json({ success: false, message: 'Database error' });
   }
 });
@@ -502,90 +532,16 @@ app.get('/profile', (req, res) => {
   }
 });
 
-// app.get('/profile', auth, (req, res) => {
-//   try 
-//     if (!req.session.user) {
-//       return res.status(401).send('Not authenticated');
-//     }
 
-//     if (req.headers['accept'] && req.headers['accept'].includes('application/json')) {
-//       // Return JSON response for tests
-//       return res.status(200).json({
-//         username: req.session.user.username,
-//       });
-//     }
-
-//     // Default behavior: render profile page
-//     res.render('pages/profile', { username: req.session.user.username });
-//   } catch (err) {
-//     console.error('Profile error:', err);
-//     res.status(500).send('Internal Server Error');
-//   }
-// });
 
 // app.use('/upload', express.static(path.join(__dirname, 'upload')));
 
-// app.get('/mycloset', async (req, res) => {
-//   if (!req.session.user) {
-//       return res.status(401).send('Not authenticated');
-//   }
-
-//   try {
-//       // Fetch all images from the database
-//       const images = await db.any('SELECT name, tags, image FROM outfits');
-
-//       // Render the mycloset page with the fetched images
-//       res.render('pages/mycloset', { images });
-//   } catch (error) {
-//       console.error('Error fetching images:', error.message);
-//       res.status(500).send('Error fetching images.');
-//   }
-// });
 
 
 
-// app.get('/mycloset', async (req, res) => {
-//   if (!req.session.user) {
-//       return res.status(401).send('Not authenticated');
-//   }
-
-//   try {
-//       // Fetch all images from the outfits table
-//       const images = await db.any('SELECT name, tags, image FROM outfits');
-
-//       // Prepend the /uploads/ path to the image filenames for proper URL resolution
-//       const formattedImages = images.map(image => ({
-//           ...image,
-//           imagePath: `/uploads/${image.image}`  // Prepend path to filename
-//       }));
-//       console.log(images); 
-
-//       // Render the template with the fetched images
-//       res.render('pages/mycloset', { username: req.session.user.username, images: formattedImages });
-//   } catch (err) {
-//       console.error('Error fetching images from database:', err);
-//       res.status(500).send('Failed to load images.');
-//   }
-// });
 
 
 
-// app.get('/mycloset', async (req, res) => {
-//   if (!req.session.user) {
-//       return res.status(401).send('Not authenticated');
-//   }
-
-//   try {
-//       // Fetch all images from the outfits table
-//       const images = await db.any('SELECT name, tags, image FROM outfits');
-
-//       // Render the template with the fetched images
-//       res.render('pages/mycloset', { username: req.session.user.username, images });
-//   } catch (err) {
-//       console.error('Error fetching images from database:', err);
-//       res.status(500).send('Failed to load images.');
-//   }
-// });
 
 
 
@@ -687,6 +643,68 @@ app.post('/upload', upload.single('image'), async (req, res) => {
 //   }
 // };
 
+// ATTMEPT 1
+// app.get('/mycloset', async (req, res) => {
+//   const username = req.session.user.username;
+
+//   try {
+//     // Fetch uploaded items from the `myclothes` table
+//     const uploadedClothes = await db.any(
+//       `SELECT name, tags, image FROM myclothes WHERE username = $1`,
+//       [username]
+//     );
+
+//     // Fetch saved clothes from the `savedclothes` table
+//     const savedClothes = await db.any(
+//       `SELECT image FROM savedclothes WHERE username = $1`,
+//       [username]
+//     );
+
+//     // Fetch right-swiped items from the `users` table (myclothes array)
+//     const user = await db.oneOrNone(
+//       `SELECT myclothes FROM users WHERE username = $1`,
+//       [username]
+//     );
+
+//     uploadedClothesModified = uploadedClothes.map(data => ({
+//       name: data.name,
+//       tags: data.tags, // Corrected property access
+//       image: data.image.slice(11) // Use data.image instead of image
+//     }));
+
+//     const rightSwipedClothes = user?.myclothes
+//       ? user.myclothes.map((image, index) => ({
+//           id: index + 1,
+//           image: image.slice(11), // Correctly slicing the image
+//           name: `Outfit ${index + 1}`, // Placeholder name
+//           tags: '', // Placeholder tags
+//         }))
+//       : [];
+
+//     // Modify savedClothes to match the same structure
+//     const savedClothesModified = savedClothes.map(data => ({
+//       image: data.image.slice(11), // Slice the path as needed
+//       name: `Saved Outfit`, // Placeholder name
+//       tags: '', // Placeholder tags
+//     }));
+
+//     // Render both uploaded, saved, and right-swiped clothes
+//     res.render('pages/mycloset', { 
+//       clothes: uploadedClothesModified, 
+//       rightSwipedClothes,
+//       savedClothes: savedClothesModified
+//     });
+//   } catch (err) {
+//     console.error('Error retrieving closet data:', err.message, err.stack);
+//     res.render('pages/mycloset', {
+//       clothes: [],
+//       rightSwipedClothes: [],
+//       savedClothes: [],
+//       error: 'Failed to load your closet. Please try again later.',
+//     });
+//   }
+// });
+
 app.get('/mycloset', async (req, res) => {
   const username = req.session.user.username;
 
@@ -697,11 +715,11 @@ app.get('/mycloset', async (req, res) => {
       [username]
     );
 
-    // Fetch right-swiped items from the `users` table (myclothes array)
-    const user = await db.oneOrNone(
-      `SELECT myclothes FROM users WHERE username = $1`,
-      [username]
-    );
+    // // Fetch right-swiped items from the `users` table (myclothes array)
+    // const user = await db.oneOrNone(
+    //   `SELECT myclothes FROM users WHERE username = $1`,
+    //   [username]
+    // );
     uploadedClothesModified = uploadedClothes.map(data => ({
       name: data.name,
       tags: data.tags, // Corrected property access
@@ -710,45 +728,23 @@ app.get('/mycloset', async (req, res) => {
     
     // console.log(uploadedClothesModified);
     
-    const rightSwipedClothes = user?.myclothes
-      ? user.myclothes.map((image, index) => ({
-          id: index + 1,
-          image: image.slice(11), // Correctly slicing the image
-          name: `Outfit ${index + 1}`, // Placeholder name
-          tags: '', // Placeholder tags
-        }))
-      : [];
     
 
     // Render both uploaded and right-swiped clothes
     res.render('pages/mycloset', { 
       clothes: uploadedClothesModified, 
-      rightSwipedClothes 
+
     });
   } catch (err) {
     console.error('Error retrieving closet data:', err.message, err.stack);
     res.render('pages/mycloset', {
       clothes: [],
-      rightSwipedClothes: [],
       error: 'Failed to load your closet. Please try again later.',
     });
   }
 });
-// THIS IS THE WORKING ONE 
-// app.get('/mycloset', async (req, res) => {
-//   const userid = req.session.user.username; 
-//   try {
-//     // Fetch all items from the myclothes table
-//     const clothes = await db.any(`SELECT * FROM myclothes WHERE username = '${userid}'`);
-    
-//     // Render the page and pass the clothes data
-//     res.render('pages/mycloset', { clothes });
-//   } catch (err) {
-//     console.error('Database query error:', err.message, err.stack);
-//     res.render('pages/mycloset', { error: 'Failed to retrieve clothing data. Please try again later.' });
-//   }
-// });
-// THIS IS THE WORKING ONE 
+
+
 // this try should work but it jsut needs to add when something gets swiped right this is the problem. 
   // try {
   //   // Fetch the first outfit by default

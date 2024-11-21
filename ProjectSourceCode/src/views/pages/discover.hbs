@@ -4,7 +4,7 @@
       background-color: #ff66b2;
       margin: 0;
       padding: 0;
-      overflow: hidden; /* Prevent scrollbars */
+      /*  overflow: hidden; Prevent scrollbars */
     }
 
     /* Shooting stars */
@@ -212,7 +212,7 @@
       document.getElementById('swipeRight').addEventListener('click', fetchNextOutfit);
     });
 
-    document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', () => {
       const swipeRightButton = document.getElementById('swipeRight');
 
       const saveOutfit = (outfit) => {
@@ -221,9 +221,7 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ 
             username: 'currentUsername', // Replace with the actual username
-            outfit: {
-              image: outfit.image, // Base64 string of the image
-            }
+            image: outfit.image
           }),
         })
         .then(response => response.json())
@@ -246,6 +244,7 @@
         fetchNextOutfit(); // Proceed to the next outfit
       });
     });
+
   </script>
 </body>
 </html>
