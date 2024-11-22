@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Style Swipe Login</title>
-  <!-- Importing the "Bungee Shade" font -->
+  <!-- "Bungee Shade" font -->
   <link href="https://fonts.googleapis.com/css2?family=Bungee+Shade&display=swap" rel="stylesheet">
   <style>
     body {
@@ -27,20 +27,18 @@
       text-align: center;
     }
 
-    /* Gradient text for "style swipe" with updated swipe animations */
+    /* style swipe text and animations */
     .gradient-text {
-      font-size: 60px; /* Increase font size for big text */
+      font-size: 60px; 
       background: linear-gradient(to right, #ff69b4, #ff1493); /* Pink gradient */
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      /* Apply the blocky font */
       font-family: 'Bungee Shade', cursive;
       margin-bottom: 20px;
-      /* Updated animation properties */
       animation: swipeCycle 7s linear infinite;
     }
 
-    /* Updated keyframes for the swipe in and swipe out cycle */
+
     @keyframes swipeCycle {
       0% {
         transform: translateX(-100%);
@@ -82,7 +80,7 @@
       padding: 10px 20px;
       margin: 10px 0;
       color: #ffffff;
-      background-color: #ff00c3; /* Bright pink button */
+      background-color: #ff00c3;
       text-decoration: none;
       border-radius: 4px;
       font-size: 16px;
@@ -93,17 +91,17 @@
     }
 
     .btn:hover {
-      background-color: #de0fa7; /* Slightly darker pink on hover */
+      background-color: #de0fa7; 
     }
 
     .text-center a {
-      color: #ff00c3; /* Pink hyperlinks */
+      color: #ff00c3; /* Pink links */
       text-decoration: none;
       transition: color 0.3s ease;
     }
 
     .text-center a:hover {
-      color: #de0fa7; /* Darker pink on hover */
+      color: #de0fa7; /* pink for hover */
     }
 
     .mt-3 {
@@ -121,36 +119,36 @@
 </head>
 <body>
   <div class="container mt-5">
-    <!-- "style swipe" Heading with Gradient, Animation, and Blocky Font -->
+   {{!-- styleswipe title  --}}
     <h1 class="gradient-text">style swipe</h1>
 
     <h2 class="text-center">Login</h2>
     
     {{> message }}
 
-    <!-- Login Form -->
+    
     <form action="/login" method="POST">
       
-      <!-- Username Field -->
+      {{!-- username  --}}
       <div class="form-group mt-3">
         <label for="username">Username</label>
         <input type="text" class="form-control" id="username" name="username" placeholder="Enter username" required>
       </div>
       
-      <!-- Password Field -->
+     {{!-- password  --}}
       <div class="form-group mt-3">
         <label for="password">Password</label>
         <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
       </div>
       
-      <!-- Submit Button -->
+      {{!-- submit button --}}
       <div class="text-center mt-4">
         <button type="submit" class="btn">Login</button>
       </div>
       
     </form>
 
-    <!-- Optional: Link to Registration Page and Reset Password -->
+    {{!-- link to registration and forgot password --}}
     <div class="text-center mt-3">
       <p>Don't have an account? <a href="/register">Register here</a>.</p>
       <p><a href="/reset-password">Forgot your password?</a></p>
