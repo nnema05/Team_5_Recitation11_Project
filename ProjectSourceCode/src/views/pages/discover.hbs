@@ -4,7 +4,7 @@
       background-color: #ff66b2;
       margin: 0;
       padding: 0;
-      /*  overflow: hidden; Prevent scrollbars */
+      
     }
 
     /* Shooting stars */
@@ -153,7 +153,7 @@
   </style>
 </head>
 <body>
-  <!-- Shooting Stars -->
+  {{!-- add shooting starts  --}}
   <div class="star"></div>
   <div class="star"></div>
   <div class="star"></div>
@@ -180,23 +180,24 @@
     </div>
   </div>
 
-  <!-- Include Bootstrap JS -->
+  
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Your JavaScript code -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const outfitCard = document.getElementById('outfitCard');
       const outfitImage = document.getElementById('outfitImage');
       const outfitName = document.getElementById('outfitName');
       const outfitTags = document.getElementById('outfitTags');
-      let currentId = {{outfit.id}}; // Initialize with the first outfit's ID
+      let currentId = {{outfit.id}}; 
+      //this gets the card image name and tags, and gets the specific outfit id 
 
       const fetchNextOutfit = () => {
         fetch(`/discover/next/${currentId}`)
+        //gets the next outfit based on the current id that was made. 
           .then(response => response.json())
           .then(data => {
             if (data.success) {
-              const { id, name, tags, image } = data.outfit;
+              const { id, name, tags, image } = data.outfit; // save into data.outfitn 
               currentId = id;
               outfitImage.src = image;
               outfitName.textContent = name;
@@ -214,6 +215,7 @@
 
   document.addEventListener('DOMContentLoaded', () => {
       const swipeRightButton = document.getElementById('swipeRight');
+      // save each outfit when the button swipe right is clicked 
 
       const saveOutfit = (outfit) => {
         fetch('/save-clothes', {
@@ -227,7 +229,7 @@
         .then(response => response.json())
         .then(data => {
           if (data.success) {
-            console.log('Outfit saved!');
+            console.log('Outfit saved!');  // save this outfit based on the outfitImage
           } else {
             console.error('Failed to save outfit:', data.message);
           }
@@ -237,7 +239,7 @@
 
       swipeRightButton.addEventListener('click', () => {
         const outfit = {
-          image: document.getElementById('outfitImage').src,
+          image: document.getElementById('outfitImage').src, // when clicked save the image 
         };
 
         saveOutfit(outfit);

@@ -228,9 +228,11 @@
       <div class="card-stack"> 
         {{#each clothes}}
           <div class="content-card">
+           {{!-- this is the current image in clothes and upload this specific image from the database --}}
             <img src="{{this.image}}" alt="Uploaded Clothing Image" class="clothing-image">
             <div class="clothing-name">{{this.name}}</div> 
             <div class="clothing-tags">{{this.tags}}</div>
+            {{!-- get the name and the tag of the specific image  --}}
           </div>
         {{/each}}
       </div>
@@ -244,6 +246,7 @@
       <div class="card-stack">
         {{#each savedClothes}}
           <div class="content-card">
+            {{!-- get specific images, names and tags from what the user has swiped on using this.image, this.name and this.tags based on the saved clothes database --}}
             <img src="{{this.image}}" alt="Saved Clothing Image" class="clothing-image">
             <div class="clothing-name">{{this.name}}</div>
             <div class="clothing-tags">{{this.tags}}</div>
