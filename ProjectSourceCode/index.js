@@ -589,8 +589,10 @@ app.get('/mycloset', async (req, res) => {
     const uploadedClothesModified = uploadedClothes.map(data => ({
       name: data.name,
       tags: data.tags,
-      image: data.image.slice(11), // Assuming image URLs need slicing
+      image: `/uploads/${path.basename(data.image)}`, // Assuming image URLs need slicing
     }));
+
+   
 
     const savedClothesModified = savedClothes.map(data => ({
       image: data.image,
