@@ -1,26 +1,13 @@
-// const base64String = fileToBase64('image.png');
 
-
-
-// content = `INSERT INTO OUTFITS(NAME, TAGS, IMAGE) VALUES("Shirt", "BLUE, STRIPES", "data:image/png;base64,` +base64String + `");`;
-
-// fs.writeFile('output.sql', content, (err) => {
-//     if (err) {
-//       console.error(err);
-//       return;
-//     }
-//     console.log('File has been written successfully.');
-//   });
-
+/* NEED TO RUN TONODE64.JS IF YOU MAKE CHANGES */
 /*
-// STEPS TO RUN THIS!
+// STEPS TO RUN THIS this file
 1.If you upload an image to img, make sure you add it to image array as an object!!
 2. Run 'node toBase64.js' in terminal when in Data_Conversion folder
 3. Put all of output.sql into insert.sql in src/init_data
-4. Then docker compose up, yay!!
+4. Then docker compose up!
 */
 
-// NEED TO RUN  node toBase64.js IF YOU ADD TO THIS!!!
 const fs = require('fs');
 
 
@@ -31,7 +18,7 @@ function fileToBase64(filePath) {
 }
 
 
-// IMAGE ARRAY WITH TAGS AND FILE PATH
+/* image array for each image we uploaded! */
 image_array = [
     {
         name: 'Skirt',
@@ -48,11 +35,6 @@ image_array = [
         tag: 'blue',
         filename: 'img/image3.jpeg'
     },
-    // {
-    //     name: 'Dress',
-    //     tag: 'blue',
-    //     filename: 'img/image4.jpeg'
-    // },
     {
         name: 'Skirt',
         tag: 'green',
@@ -291,6 +273,7 @@ image_array = [
     },
 ]
 
+/* BASE64 --> keep for later changes */
 // // make insert into file that will go into insert.sql!!!
 // let inserts = "";
 // for(let i = 0; i < image_array.length; i++) {
@@ -309,6 +292,7 @@ image_array = [
 //     console.log('File has been written successfully.');
 //   });
 
+/* image path, inserting into database --> keep for later changes */
 let inserts = '';
 for (let i = 0; i < image_array.length; i++) {
     // Use the filename directly instead of converting to Base64
