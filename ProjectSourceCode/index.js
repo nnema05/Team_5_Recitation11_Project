@@ -85,7 +85,7 @@ console.log(__dirname, path.join(__dirname, 'src', 'views'))
 app.set('views', path.join(__dirname, 'src', 'views'));
 app.use(express.static(path.join(__dirname, 'resources'))); // Updated path to serve static files
 
-// database configuration
+// RENDER database configuration
 // const dbConfig = {
 //   host: process.env.HOST, // the database server
 //   port: process.env.POSTGRES_PORT, // the database port
@@ -94,7 +94,8 @@ app.use(express.static(path.join(__dirname, 'resources'))); // Updated path to s
 //   password: process.env.POSTGRES_PASSWORD, // the password of the user account
 // };
 const dbConfig = {
-  host: 'db', // the database server
+  // host: 'db', // the database server
+  host: process.env.POSTGRES_HOST, // the database server
   port: 5432, // the database port
   database: process.env.POSTGRES_DB, // the database name
   user: process.env.POSTGRES_USER, // the user account to connect with
