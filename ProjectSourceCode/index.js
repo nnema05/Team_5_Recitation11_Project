@@ -85,7 +85,7 @@ console.log(__dirname, path.join(__dirname, 'src', 'views'))
 app.set('views', path.join(__dirname, 'src', 'views'));
 app.use(express.static(path.join(__dirname, 'resources'))); // Updated path to serve static files
 
-// RENDER database configuration
+// RENDER database configuration works before docker!!
 // const dbConfig = {
 //   host: process.env.HOST, // the database server
 //   port: process.env.POSTGRES_PORT, // the database port
