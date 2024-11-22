@@ -1,7 +1,8 @@
+{{!-- styling!! --}}
 <style>
   body {
     font-family: Arial, sans-serif;
-    background-color: #ffe6f2; /* Light pink background */
+    background-color: #ffe6f2;
     margin: 0;
     padding: 0;
   }
@@ -31,7 +32,7 @@
     padding: 10px 20px;
     margin: 10px 0;
     color: #ffffff;
-    background-color: #ff00c3; /* Bright pink button */
+    background-color: #ff00c3;
     text-decoration: none;
     border-radius: 4px;
     font-size: 16px;
@@ -39,21 +40,21 @@
     transition: background-color 0.3s ease;
   }
   .btn:hover {
-    background-color: #de0fa7; /* Slightly darker pink on hover */
+    background-color: #de0fa7;
   }
   .text-center a {
-    color: #ff00c3; /* Pink hyperlinks */
+    color: #ff00c3;
     text-decoration: none;
     transition: color 0.3s ease;
   }
   .text-center a:hover {
-    color: #de0fa7; /* Darker pink on hover */
+    color: #de0fa7;
   }
   .error-message {
-  color: #ff007f; /* Bright pink */
-  background-color: #ffe6f2; /* Light pink background */
+  color: #ff007f; 
+  background-color: #ffe6f2;
   padding: 10px;
-  border: 1px solid #ff007f; /* Border in the same pink */
+  border: 1px solid #ff007f;
   border-radius: 4px;
   margin-top: 10px;
   text-align: center;
@@ -64,23 +65,23 @@
   <div class="container mt-5">
   <h2 class="text-center">Register</h2>
   
-  <!-- Display error message if user already exists -->
+  <!-- error message if user already exists -->
   {{#if error}}
     <div class="error-message">
       {{error}}
     </div>
   {{/if}}
 
-  <!-- Registration Form -->
+  <!-- Registration -->
   <form action="/register" method="POST">
     
-    <!-- Username Field -->
+    <!-- Username -->
     <div class="form-group mt-3">
       <label for="username">Username</label>
       <input type="text" class="form-control" id="username" name="username" placeholder="Enter username" required>
     </div>
     
-    <!-- Password Field -->
+    <!-- Password -->
     <div class="form-group mt-3">
       <label for="password">Password</label>
       <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
@@ -93,7 +94,7 @@
   
   </form>
 
-  <!-- Optional: Link to Login Page -->
+  <!-- Link to Login Page -->
   <div class="text-center mt-3">
     <p>Already have an account? <a href="/login">Login here</a>.</p>
   </div>
