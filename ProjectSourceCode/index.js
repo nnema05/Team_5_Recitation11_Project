@@ -267,7 +267,7 @@ app.get('/discover', async (req, res) => {
     );
 
     if (outfit) {
-      res.render('pages/discover', { outfit });
+      res.render('pages/discover', { outfit: outfit });
     } else {
       res.render('pages/discover', { outfit: null, message: 'No outfits found.' });
     }
