@@ -1,80 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Logged Out</title>
+    <!-- Include any required fonts -->
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #ffe6f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ff66b2;
             margin: 0;
             padding: 0;
         }
-        .navbar {
-            background-color: #ff99cc;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-        }
-        .navbar-toggler-icon {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255,102,178,1)' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
-        }
-        .nav-link {
-            color: white !important;
-            font-weight: bold;
-            transition: color 0.3s ease;
-        }
-        .nav-link:hover {
-            color: #ffccff !important;
-        }
-        .border-bottom {
-            border-bottom: 3px solid #ff66b2 !important;
-        }
-        .profile-container {
-            max-width: 500px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #ff99cc;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
             text-align: center;
+            position: relative;
+            z-index: 1;
         }
-        .title {
-            text-align: center;
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-top: 20px;
-            margin-bottom: 20px;
+
+        .container h1 {
+            color: #ff66b2;
+            position: relative;
+            z-index: 1;
         }
+
+        /* Star emojis before and after the heading */
+        .container h1::before,
+        .container h1::after {
+            content: "⭐";
+            margin: 0 5px;
+        }
+
         .message {
-            background-color: #ffccff; /* Light pink background */
+            background-color: #fff0f5; /* Light pink background */
             color: #ff66b2; /* Darker pink text */
             border: 2px solid #ff99cc; /* Border in pink */
-            border-radius: 5px; /* Rounded corners */
-            padding: 10px 15px;
-            margin: 15px 0;
+            border-radius: 15px; /* Rounded corners */
+            padding: 30px;
+            margin: 30px 0;
             font-weight: bold;
             font-size: 1.5rem; /* Increased font size */
             text-align: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
+            animation: fadeInDown 1s ease-out;
         }
+
         .btn {
-        display: inline-block;
-        padding: 10px 20px;
-        margin: 10px 0;
-        color: #ffffff;
-        background-color: #ff00c3; /* Bright pink button */
-        text-decoration: none;
-        border-radius: 4px;
-        font-size: 16px;
-        text-align: center;
-        transition: background-color 0.3s ease;
-    }
-    .btn:hover {
-        background-color: #de0fa7; /* Slightly darker pink on hover */
-  }
+            display: inline-block;
+            padding: 12px 25px;
+            margin: 20px 0;
+            color: #ffffff;
+            background: linear-gradient(45deg, #ff99cc, #ff66b2);
+            text-decoration: none;
+            border-radius: 30px;
+            font-size: 18px;
+            text-align: center;
+            transition: background 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: linear-gradient(45deg, #ff80bf, #ff4da6);
+            transform: translateY(-3px);
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            left: -50%;
+            top: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(255, 102, 178, 0.2), transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .btn:hover::after {
+            opacity: 1;
+        }
+
+        /* Adding some flare */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Confetti animation */
+        .confetti {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            width: 10px;
+            height: 10px;
+            background-color: #ff66b2;
+            opacity: 0.7;
+            animation: confettiFall 5s infinite;
+            z-index: 0;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateX(0) translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(-500px) translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Create multiple confetti pieces */
+        .confetti:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .confetti:nth-child(2) { left: 20%; animation-delay: 0.5s; }
+        .confetti:nth-child(3) { left: 30%; animation-delay: 1s; }
+        .confetti:nth-child(4) { left: 40%; animation-delay: 1.5s; }
+        .confetti:nth-child(5) { left: 50%; animation-delay: 2s; }
+        .confetti:nth-child(6) { left: 60%; animation-delay: 2.5s; }
+        .confetti:nth-child(7) { left: 70%; animation-delay: 3s; }
+        .confetti:nth-child(8) { left: 80%; animation-delay: 3.5s; }
+        .confetti:nth-child(9) { left: 90%; animation-delay: 4s; }
+        .confetti:nth-child(10) { left: 100%; animation-delay: 4.5s; }
+
     </style>
 </head>
 <body>
-    <div class="message">
-        <h1>Logged out successfully. See you later!</h1>
-        <a href="/" class="btn btn-primary">Go to Home</a> 
-        {{!-- logged out text and go to home button  --}}
-    </div>
+    <!-- Confetti Animation -->
+    <div class="confetti"></div>
+    <div class="confetti"></div>
+    <div class="confetti"></div>
+    <div class="confetti"></div>
+    <div class="confetti"></div>
+    <div class="confetti"></div>
+    <div class="confetti"></div>
+    <div class="confetti"></div>
+    <div class="confetti"></div>
+    <div class="confetti"></div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <div class="container">
+        <h1>Logged Out</h1>
+        <div class="message">
+            <h1>Logged out successfully. See you later!</h1>
+            <a href="/" class="btn">Go to Home</a>
+        </div>
+    </div>
 </body>
 </html>
