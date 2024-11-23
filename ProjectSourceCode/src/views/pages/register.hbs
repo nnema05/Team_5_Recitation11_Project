@@ -1,101 +1,159 @@
-{{!-- styling!! --}}
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #ffe6f2;
-    margin: 0;
-    padding: 0;
-  }
-  .container {
-    max-width: 800px;
-    margin: 20px auto;
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  h2 {
-    color: #333333;
-    text-align: center;
-  }
-  label {
-    font-size: 16px;
-    color: #555555;
-  }
-  .form-control {
-    font-size: 14px;
-    padding: 10px;
-    margin-top: 5px;
-  }
-  .btn {
-    display: inline-block;
-    padding: 10px 20px;
-    margin: 10px 0;
-    color: #ffffff;
-    background-color: #ff00c3;
-    text-decoration: none;
-    border-radius: 4px;
-    font-size: 16px;
-    text-align: center;
-    transition: background-color 0.3s ease;
-  }
-  .btn:hover {
-    background-color: #de0fa7;
-  }
-  .text-center a {
-    color: #ff00c3;
-    text-decoration: none;
-    transition: color 0.3s ease;
-  }
-  .text-center a:hover {
-    color: #de0fa7;
-  }
-  .error-message {
-  color: #ff007f; 
-  background-color: #ffe6f2;
-  padding: 10px;
-  border: 1px solid #ff007f;
-  border-radius: 4px;
-  margin-top: 10px;
-  text-align: center;
-  font-size: 16px;
-}
-</style>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Register</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #ff66b2;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      background-color: #ffffff;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      position: relative;
+      z-index: 1;
+    }
+    .container h1, .container h2 {
+      color: #ff66b2;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    /* Star emojis before and after the headings */
+    .container h1::before,
+    .container h1::after,
+    .container h2::before,
+    .container h2::after {
+      content: "⭐";
+      margin: 0 5px;
+    }
+    label {
+      font-size: 16px;
+      color: #ff66b2;
+    }
+    .form-control {
+      font-size: 14px;
+      padding: 10px;
+      margin-top: 5px;
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid #ff99cc;
+      border-radius: 5px;
+    }
+    .form-control:focus {
+      outline: none;
+      border-color: #ff66b2;
+      box-shadow: 0 0 5px rgba(255, 102, 178, 0.5);
+    }
+    .btn {
+      display: inline-block;
+      padding: 12px 25px;
+      margin: 10px 0;
+      color: #ffffff;
+      background: linear-gradient(45deg, #ff99cc, #ff66b2);
+      text-decoration: none;
+      border-radius: 30px;
+      font-size: 16px;
+      text-align: center;
+      transition: background 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+      border: none;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background: linear-gradient(45deg, #ff80bf, #ff4da6);
+    }
+    .btn::after {
+      content: '';
+      position: absolute;
+      left: -50%;
+      top: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at center, rgba(255, 102, 178, 0.2), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .btn:hover::after {
+      opacity: 1;
+    }
+    .text-center a {
+      color: #ff66b2;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    .text-center a:hover {
+      color: #ff4da6;
+    }
+    .error-message {
+      color: #ff66b2; 
+      background-color: #fff0f5;
+      padding: 10px;
+      border: 1px solid #ff66b2;
+      border-radius: 4px;
+      margin-top: 10px;
+      text-align: center;
+      font-size: 16px;
+    }
+    .mt-3 {
+      margin-top: 1rem;
+    }
+    .mt-4 {
+      margin-top: 1.5rem;
+    }
+    .mt-5 {
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
   <div class="container mt-5">
-  <h2 class="text-center">Register</h2>
-  
-  <!-- error message if user already exists -->
-  {{#if error}}
-    <div class="error-message">
-      {{error}}
-    </div>
-  {{/if}}
+    <h2>Register</h2>
+    
+    <!-- Error message if user already exists -->
+    {{#if error}}
+      <div class="error-message">
+        {{error}}
+      </div>
+    {{/if}}
 
-  <!-- Registration -->
-  <form action="/register" method="POST">
+    <!-- Registration -->
+    <form action="/register" method="POST">
+      
+      <!-- Username -->
+      <div class="form-group mt-3">
+        <label for="username">Username</label>
+        <input type="text" class="form-control" id="username" name="username" placeholder="Enter username" required>
+      </div>
+      
+      <!-- Password -->
+      <div class="form-group mt-3">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
+      </div>
+      
+      <!-- Submit Button -->
+      <div class="text-center mt-4">
+        <button type="submit" class="btn">Register</button>
+      </div>
     
-    <!-- Username -->
-    <div class="form-group mt-3">
-      <label for="username">Username</label>
-      <input type="text" class="form-control" id="username" name="username" placeholder="Enter username" required>
-    </div>
-    
-    <!-- Password -->
-    <div class="form-group mt-3">
-      <label for="password">Password</label>
-      <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
-    </div>
-    
-    <!-- Submit Button -->
-    <div class="text-center mt-4">
-      <button type="submit" class="btn btn-primary">Register</button>
-    </div>
-  
-  </form>
+    </form>
 
-  <!-- Link to Login Page -->
-  <div class="text-center mt-3">
-    <p>Already have an account? <a href="/login">Login here</a>.</p>
+    <!-- Link to Login Page -->
+    <div class="text-center mt-3">
+      <p>Already have an account? <a href="/login">Login here</a>.</p>
+    </div>
   </div>
-</div>
+</body>
+</html>
