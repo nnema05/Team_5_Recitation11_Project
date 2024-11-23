@@ -28,3 +28,6 @@ INSERT INTO OUTFITS(NAME, TAGS, IMAGE) VALUES('Jacket', 'blue', 'img/image27.jpe
 INSERT INTO OUTFITS(NAME, TAGS, IMAGE) VALUES('Dress', 'blue', 'img/image28.jpeg');
 INSERT INTO OUTFITS(NAME, TAGS, IMAGE) VALUES('Vest', 'tan', 'img/image29.jpeg');
 INSERT INTO OUTFITS(NAME, TAGS, IMAGE) VALUES('Shirt', 'white', 'img/image30.jpeg');
+
+ALTER TABLE users
+ADD COLUMN last_seen_id INTEGER DEFAULT 1; -- Default to 1 (first outfit)

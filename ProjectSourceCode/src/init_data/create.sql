@@ -4,7 +4,6 @@ CREATE TABLE IF NOT EXISTS users (
     info TEXT
     -- ,
    -- myclothes TEXT[] 
-   , last_seen_id INTEGER DEFAULT 1
 );
 
 -- creates database of outfits!!
