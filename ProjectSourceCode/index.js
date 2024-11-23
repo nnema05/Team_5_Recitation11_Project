@@ -190,11 +190,44 @@ app.get('/register', (req, res) => {
 // });
 
 /* discover route to get the images from the database */
+// app.get('/discover', async (req, res) => {
+//   try {
+//     // Fetch the first outfit by default
+//     const outfit = await db.oneOrNone('SELECT id, name, tags, image FROM outfits WHERE id = $1', [1]); // Start with id=1
+//     res.render('pages/discover', { outfit });
+//   } catch (error) {
+//     console.error('Error fetching outfit from database:', error);
+//     res.render('pages/discover', { outfit: null, message: 'Failed to load outfit.' });
+//   }
+// });
+
+// app.get('/discover/next/:id', async (req, res) => {
+//   const currentId = parseInt(req.params.id, 10);
+//   try {
+//     const outfit = await db.oneOrNone('SELECT id, name, tags, image FROM outfits WHERE id > $1 ORDER BY id ASC LIMIT 1', [currentId]);
+
+//     if (outfit) {
+//       res.json({ success: true, outfit });
+//     } else {
+//       res.json({ success: false, message: 'No more outfits.' });
+//     }
+//   } catch (error) {
+//     console.error('Error fetching the next outfit:', error);
+//     res.status(500).json({ success: false, message: 'Failed to load next outfit.' });
+//   }
+// });
+
+/* Discover route to get the images from the database */
 app.get('/discover', async (req, res) => {
   try {
-    // Fetch the first outfit by default
-    const outfit = await db.oneOrNone('SELECT id, name, tags, image FROM outfits WHERE id = $1', [1]); // Start with id=1
-    res.render('pages/discover', { outfit });
+    const lastSeenId = req.session.lastSeenId || 1; // Default to 1 if no session variable exists
+    const outfit = await db.oneOrNone('SELECT id, name, tags, image FROM outfits WHERE id = $1', [lastSeenId]);
+    
+    if (outfit) {
+      res.render('pages/discover', { outfit });
+    } else {
+      res.render('pages/discover', { outfit: null, message: 'No outfits found.' });
+    }
   } catch (error) {
     console.error('Error fetching outfit from database:', error);
     res.render('pages/discover', { outfit: null, message: 'Failed to load outfit.' });
@@ -205,8 +238,8 @@ app.get('/discover/next/:id', async (req, res) => {
   const currentId = parseInt(req.params.id, 10);
   try {
     const outfit = await db.oneOrNone('SELECT id, name, tags, image FROM outfits WHERE id > $1 ORDER BY id ASC LIMIT 1', [currentId]);
-
     if (outfit) {
+      req.session.lastSeenId = outfit.id; // Save the last seen ID in the session
       res.json({ success: true, outfit });
     } else {
       res.json({ success: false, message: 'No more outfits.' });
@@ -219,7 +252,6 @@ app.get('/discover/next/:id', async (req, res) => {
 
 
 /*saves clothes to users database! */
-
 app.post('/save-clothes', async (req, res) => {
   console.log("hi");
   const image = req.body.image; // Expecting the full outfit object
